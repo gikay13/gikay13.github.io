@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>База данных - Семейство Караваев/Петрова/Черкасова</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+        }
+
+        :root {
+            --primary: #8b0000;
+            --primary-dark: #5a0000;
+            --primary-light: #b22222;
+            --secondary: #0a0a0a;
+            --accent: #ff4444;
+            --text: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --card-bg: rgba(20, 20, 20, 0.85);
+            --transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --warning: #ff4444;
+            --warning-dark: #cc0000;
+            --neon-red: #ff073a;
+            --neon-glow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red), 0 0 30px var(--neon-red);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
+
+        body {
+            background: 
+                radial-gradient(circle at 20% 30%, #1a0000 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, #0a0000 0%, transparent 50%),
+                linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Мрачный анимированный фон с векторными элементами */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+            opacity: 0.3;
+        }
+
+        /* Стили для векторных крестов */
+        .vector-cross {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            opacity: 0.1;
+            animation: floatCross 40s infinite linear;
+            filter: drop-shadow(0 0 5px var(--neon-red));
+        }
+
+        .vector-cross::before, .vector-cross::after {
+            content: '';
+            position: absolute;
+            background: var(--neon-red);
+            border-radius: 2px;
+        }
+
+        .vector-cross::before {
+            width: 6px;
+            height: 40px;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            box-shadow: var(--neon-glow);
+        }
+
+        .vector-cross::after {
+            width: 40px;
+            height: 6px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            box-shadow: var(--neon-glow);
+        }
+
+        /* Стили для векторных черепов */
+        .vector-skull {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            opacity: 0.08;
+            animation: floatSkull 35s infinite linear;
+            filter: drop-shadow(0 0 8px var(--neon-red));
+        }
+
+        .vector-skull::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 5px;
+            left: 5px;
+            background: transparent;
+            border: 3px solid var(--neon-red);
+            border-radius: 50%;
+            box-shadow: var(--neon-glow);
+        }
+
+        .vector-skull::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            bottom: 5px;
+            left: 10px;
+            background: transparent;
+            border-bottom: 3px solid var(--neon-red);
+            border-left: 3px solid var(--neon-red);
+            border-right: 3px solid var(--neon-red);
+            border-radius: 0 0 15px 15px;
+            box-shadow: var(--neon-glow);
+        }
+
+        .vector-cross:nth-child(1) {
+            top: 15%;
+            left: 8%;
+            animation-duration: 45s;
+        }
+
+        .vector-cross:nth-child(2) {
+            top: 65%;
+            right: 12%;
+            animation-duration: 50s;
+            animation-direction: reverse;
+        }
+
+        .vector-cross:nth-child(3) {
+            bottom: 25%;
+            left: 15%;
+            animation-duration: 55s;
+        }
+
+        .vector-skull:nth-child(4) {
+            top: 35%;
+            right: 18%;
+            animation-duration: 40s;
+        }
+
+        .vector-skull:nth-child(5) {
+            bottom: 45%;
+            left: 12%;
+            animation-duration: 60s;
+            animation-direction: reverse;
+        }
+
+        .vector-skull:nth-child(6) {
+            top: 75%;
+            left: 80%;
+            animation-duration: 65s;
+        }
+
+        @keyframes floatSkull {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(25px, 15px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, 30px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-25px, 15px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        @keyframes floatCross {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(-18px, 22px) rotate(-90deg);
+            }
+            50% {
+                transform: translate(0, -35px) rotate(-180deg);
+            }
+            75% {
+                transform: translate(18px, 22px) rotate(-270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(-360deg);
+            }
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Заголовок с неоновым эффектом */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 30px;
+            background: 
+                radial-gradient(circle at top left, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at bottom right, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
+                rgba(10, 10, 10, 0.9);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(139, 0, 0, 0.5);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.7),
+                inset 0 0 50px rgba(139, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), var(--primary), transparent);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #fff, var(--primary-light), #ff6b6b, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        /* Панель навигации с неоновыми элементами */
+        .nav-panel {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .nav-panel::before {
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--neon-red);
+            border-radius: 50%;
+            box-shadow: var(--neon-glow);
+            opacity: 0.6;
+        }
+
+        .nav-panel::after {
+            content: '';
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--neon-red);
+            border-radius: 50%;
+            box-shadow: var(--neon-glow);
+            opacity: 0.6;
+        }
+
+        .nav-btn {
+            background: 
+                radial-gradient(circle at top left, rgba(139, 0, 0, 0.4) 0%, transparent 70%),
+                var(--card-bg);
+            border: none;
+            color: var(--text);
+            padding: 18px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            box-shadow: 
+                0 5px 15px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 0, 0, 0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 10px 25px rgba(139, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 10px 25px rgba(139, 0, 0, 0.6),
+                0 0 20px rgba(139, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-btn.warning {
+            background: linear-gradient(135deg, var(--warning-dark), var(--warning));
+            border-color: rgba(255, 68, 68, 0.5);
+            animation: pulseWarning 2s infinite;
+            position: relative;
+        }
+
+        .nav-btn.warning::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            background: var(--neon-red);
+            border-radius: 50%;
+            animation: spin 3s infinite linear;
+            box-shadow: var(--neon-glow);
+        }
+
+        .nav-btn.warning:hover {
+            box-shadow: 
+                0 10px 25px rgba(255, 68, 68, 0.6),
+                0 0 20px rgba(255, 68, 68, 0.4);
+            border-color: var(--warning);
+        }
+
+        .nav-btn.warning.active {
+            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+            box-shadow: 
+                0 10px 25px rgba(255, 68, 68, 0.8),
+                0 0 25px rgba(255, 68, 68, 0.6);
+        }
+
+        @keyframes pulseWarning {
+            0%, 100% {
+                box-shadow: 
+                    0 5px 15px rgba(255, 68, 68, 0.4),
+                    0 0 10px rgba(255, 68, 68, 0.3);
+            }
+            50% {
+                box-shadow: 
+                    0 5px 20px rgba(255, 68, 68, 0.8),
+                    0 0 15px rgba(255, 68, 68, 0.6);
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Карточки с неоновыми эффектами */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: 
+                radial-gradient(circle at top right, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
+                var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.6),
+                inset 0 0 30px rgba(139, 0, 0, 0.1);
+            transition: var(--transition);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            animation: cardAppear 0.8s forwards;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 15px 35px rgba(139, 0, 0, 0.5),
+                0 0 30px rgba(139, 0, 0, 0.3),
+                inset 0 0 30px rgba(139, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .card.warning {
+            border-color: rgba(255, 68, 68, 0.5);
+            box-shadow: 
+                0 10px 25px rgba(255, 68, 68, 0.3),
+                inset 0 0 30px rgba(255, 68, 68, 0.1);
+        }
+
+        .card.warning:hover {
+            box-shadow: 
+                0 15px 35px rgba(255, 68, 68, 0.5),
+                0 0 30px rgba(255, 68, 68, 0.3),
+                inset 0 0 30px rgba(255, 68, 68, 0.1);
+            border-color: var(--warning);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+
+        .card-header.warning {
+            background: linear-gradient(135deg, var(--warning-dark), var(--warning));
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .info-row::before {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--neon-red);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--neon-red);
+        }
+
+        .info-label {
+            color: var(--primary-light);
+            font-weight: 600;
+            min-width: 160px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-row.warning .info-label {
+            color: var(--warning);
+        }
+
+        .info-value {
+            flex: 1;
+            color: var(--text);
+        }
+
+        /* Дополнительные стили */
+        .evidence-list {
+            list-style-type: none;
+            margin: 20px 0;
+        }
+
+        .evidence-list li {
+            padding: 12px;
+            margin-bottom: 12px;
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid var(--warning);
+            border-radius: 0 8px 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .evidence-list li:hover {
+            background: rgba(255, 68, 68, 0.2);
+            transform: translateX(5px);
+        }
+
+        .evidence-list li::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: var(--neon-red);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+
+        .law-article {
+            background: rgba(139, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .law-article::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--neon-red);
+            border-radius: 50%;
+            opacity: 0.2;
+            box-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .law-article.warning {
+            background: rgba(255, 68, 68, 0.2);
+            border-left: 5px solid var(--warning);
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .nav-panel {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .nav-panel::before,
+            .nav-panel::after {
+                display: none;
+            }
+        }
+
+        /* Специальные эффекты */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .highlight {
+            background: rgba(139, 0, 0, 0.3);
+            padding: 3px 10px;
+            border-radius: 5px;
+            color: #ff6b6b;
+            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+        }
+
+        .blood-drop {
+            position: absolute;
+            width: 120px;
+            height: 180px;
+            background: radial-gradient(ellipse at center, var(--primary) 0%, transparent 70%);
+            opacity: 0.1;
+            border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
+            z-index: -1;
+            animation: dropFall 20s infinite linear;
+            filter: blur(2px);
+        }
+
+        .blood-drop-1 {
+            top: -60px;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .blood-drop-2 {
+            top: -60px;
+            left: 20%;
+            animation-delay: 7s;
+        }
+
+        .blood-drop-3 {
+            top: -60px;
+            right: 30%;
+            animation-delay: 14s;
+        }
+
+        @keyframes dropFall {
+            0% {
+                transform: translateY(-150px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .severity-high {
+            color: var(--warning);
+            font-weight: bold;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+
+        .status-active {
+            color: #ff6b6b;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
+        }
+        
+        .person-photo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            margin: 0 auto 20px;
+            display: block;
+            box-shadow: 
+                0 0 20px rgba(139, 0, 0, 0.5),
+                inset 0 0 20px rgba(139, 0, 0, 0.3);
+            filter: sepia(0.3) contrast(1.1);
+        }
+        
+        .additional-info {
+            background: rgba(139, 0, 0, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+        
+        .additional-info::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 25px;
+            height: 25px;
+            border: 2px solid var(--neon-red);
+            border-radius: 50%;
+            opacity: 0.3;
+            box-shadow: 0 0 8px var(--neon-red);
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-light);
+            text-decoration: none;
+            margin: 8px 0;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .social-link:hover {
+            color: var(--accent);
+            transform: translateX(8px);
+            background: rgba(139, 0, 0, 0.2);
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Векторные кресты по углам страницы */
+        .corner-cross {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            opacity: 0.1;
+            z-index: -1;
+            filter: drop-shadow(0 0 5px var(--neon-red));
+        }
+
+        .corner-cross::before, .corner-cross::after {
+            content: '';
+            position: absolute;
+            background: var(--neon-red);
+            border-radius: 2px;
+            box-shadow: var(--neon-glow);
+        }
+
+        .corner-cross::before {
+            width: 6px;
+            height: 40px;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        .corner-cross::after {
+            width: 40px;
+            height: 6px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+        }
+
+        .cross-tl {
+            top: 20px;
+            left: 20px;
+        }
+
+        .cross-tr {
+            top: 20px;
+            right: 20px;
+        }
+
+        .cross-bl {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .cross-br {
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Мрачный анимированный фон с векторными элементами -->
+    <div class="bg-animation">
+        <div class="vector-cross"></div>
+        <div class="vector-cross"></div>
+        <div class="vector-cross"></div>
+        <div class="vector-skull"></div>
+        <div class="vector-skull"></div>
+        <div class="vector-skull"></div>
+        <div class="blood-drop blood-drop-1"></div>
+        <div class="blood-drop blood-drop-2"></div>
+        <div class="blood-drop blood-drop-3"></div>
+    </div>
+
+    <!-- Векторные кресты по углам -->
+    <div class="corner-cross cross-tl"></div>
+    <div class="corner-cross cross-tr"></div>
+    <div class="corner-cross cross-bl"></div>
+    <div class="corner-cross cross-br"></div>
+
+    <div class="container">
+        <!-- Заголовок -->
+        <header class="header">
+            <h1><i class="fas fa-database"></i> БАЗА ДАННЫХ</h1>
+            <p>Семейство Караваев/Петрова/Черкасова | Обновлено: Сентябрь 2025</p>
+        </header>
+
+        <!-- Панель навигации -->
+        <div class="nav-panel">
+            <button class="nav-btn active" data-target="artem">
+                <i class="fas fa-male"></i> Караваев А.И.
+            </button>
+            <button class="nav-btn" data-target="mother">
+                <i class="fas fa-female"></i> Петрова Я.А.
+            </button>
+            <button class="nav-btn" data-target="grandmother">
+                <i class="fas fa-user-alt"></i> Черкасова М.А.
+            </button>
+            <button class="nav-btn warning pulse" data-target="violations">
+                <i class="fas fa-gavel"></i> Нарушения РФ
+            </button>
+            <button class="nav-btn" data-target="connections">
+                <i class="fas fa-link"></i> Связи
+            </button>
+            <button class="nav-btn" data-target="additional">
+                <i class="fas fa-info-circle"></i> Доп. информация
+            </button>
+        </div>
+
+        <!-- Карточки с информацией -->
+        <div class="cards-container" id="cards-container">
+            <!-- Карточки будут генерироваться JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Данные для карточек (остаются теми же)
+        const data = {
+            artem: {
+                title: "Караваев Артем Иванович",
+                role: "Несовершеннолетний",
+                icon: "fas fa-male",
+                photo: "https://sun1-97.userapi.com/impg/_nb2NhfE_jv_qxgCOx2FOjBdyXDTRZoApoB7ow/mLrG7mi-98Y.jpg?quality=96&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360&sign=027f3a6ab46c06112aaff21998198fb8&u=Gsgve_JGBJIKsdpKeqSEdgzA8QnKETeW3ILhU4seZNI&cs=200x200",
+                cards: [
+                    {
+                        title: "Личные данные",
+                        icon: "fas fa-id-card",
+                        content: [
+                            { label: "Дата рождения", value: "27.04.2009 (16 лет)" },
+                            { label: "Место рождения", value: "г. Москва, Россия" },
+                            { label: "Возрастная группа", value: "Подросток" },
+                            { label: "Социальный статус", value: "<span class='highlight'>Инвалид, иждивенец</span>" }
+                        ]
+                    },
+                    {
+                        title: "Контакты",
+                        icon: "fas fa-address-book",
+                        content: [
+                            { label: "Мобильный телефон", value: "+7 (916) 745-22-79" },
+                            { label: "Электронная почта", value: "Artem.karavaev2009@mail.ru" },
+                            { label: "Telegram", value: "@potato463 [ID: 1744997076]" },
+                            { label: "ВКонтакте", value: "https://vk.com/id589337367" }
+                        ]
+                    },
+                    {
+                        title: "Документы",
+                        icon: "fas fa-file-alt",
+                        content: [
+                            { label: "Свидетельство о рождении", value: "IV-МЮ № 668127" },
+                            { label: "Дата выдачи", value: "13.05.2009" },
+                            { label: "Кем выдано", value: "Рязанский отдел ЗАГС Управления ЗАГС Москвы" },
+                            { label: "СНИЛС", value: "179-523-984 25" },
+                            { label: "ИНН", value: "7777 440900 36" },
+                            { label: "Полис ОМС", value: "7700 0010 1077 4409" }
+                        ]
+                    },
+                    {
+                        title: "Адресная информация",
+                        icon: "fas fa-home",
+                        content: [
+                            { label: "Фактический адрес", value: "г. Москва, Тарханская улица, д. 3, корп. 2, кв. 256" },
+                            { label: "Район", value: "ЮВАО, Выхино-Жулебино" },
+                            { label: "Дата регистрации", value: "19.05.2009" },
+                            { label: "Зарегистрированные лица", value: "4 человека" }
+                        ]
+                    }
+                ]
+            },
+            mother: {
+                title: "Петрова Яна Анатольевна",
+                role: "Мать",
+                icon: "fas fa-female",
+                photo: "https://via.placeholder.com/200x200/8b0000/ffffff?text=Я.А.Петрова",
+                cards: [
+                    {
+                        title: "Личные данные",
+                        icon: "fas fa-id-card",
+                        content: [
+                            { label: "Дата рождения", value: "13.09.1985 (39 лет)" },
+                            { label: "Место рождения", value: "г. Москва" },
+                            { label: "Возрастная группа", value: "Взрослый" }
+                        ]
+                    },
+                    {
+                        title: "Контакты",
+                        icon: "fas fa-address-book",
+                        content: [
+                            { label: "Мобильный телефон", value: "+7 (926) 558-29-45" },
+                            { label: "Дополнительный телефон", value: "+7 (495) 704-14-76" },
+                            { label: "Электронная почта", value: "Anikanova.yana2012@yandex.ru" }
+                        ]
+                    },
+                    {
+                        title: "Документы - Паспорт",
+                        icon: "fas fa-passport",
+                        content: [
+                            { label: "Серия и номер", value: "45 18 916547" },
+                            { label: "Дата выдачи", value: "26.10.2018" },
+                            { label: "Кем выдан", value: "ГУ МВД России по г. Москве" },
+                            { label: "Код подразделения", value: "770-098" }
+                        ]
+                    },
+                    {
+                        title: "Документы - Прочие",
+                        icon: "fas fa-files",
+                        content: [
+                            { label: "СНИЛС", value: "094-712-122 63" },
+                            { label: "ИНН", value: "7721 534609 19<br>7713 148500 17 (доп.)" },
+                            { label: "Полис ОМС", value: "7750 4108 8600 2151" }
+                        ]
+                    },
+                    {
+                        title: "Водительское удостоверение",
+                        icon: "fas fa-id-card-alt",
+                        content: [
+                            { label: "Номер", value: "99 04 645128" },
+                            { label: "Дата выдачи", value: "20.11.2018" },
+                            { label: "Дата окончания", value: "14.06.2028" },
+                            { label: "Категории", value: "B, B1, M" },
+                            { label: "Причина замены", value: "Замена в связи со сменой фамилии" }
+                        ]
+                    },
+                    {
+                        title: "Трудовая деятельность",
+                        icon: "fas fa-briefcase",
+                        content: [
+                            { label: "Работодатель", value: "ООО 'МН Московский Регион'" },
+                            { label: "ИНН работодателя", value: "7709 965523" },
+                            { label: "Период работы", value: "с 26.10.2018 по 20.12.2022" },
+                            { label: "Статус занятости", value: "<span class='highlight'>Не работает с декабря 2022</span>" }
+                        ]
+                    }
+                ]
+            },
+            grandmother: {
+                title: "Черкасова Марина Анатольевна",
+                role: "Бабушка",
+                icon: "fas fa-user-alt",
+                photo: "https://via.placeholder.com/200x200/5a0000/ffffff?text=М.А.Черкасова",
+                cards: [
+                    {
+                        title: "Личные данные",
+                        icon: "fas fa-id-card",
+                        content: [
+                            { label: "Дата рождения", value: "16.05.1961 (64 года)" },
+                            { label: "Возрастная группа", value: "Пенсионер" }
+                        ]
+                    },
+                    {
+                        title: "Контакты",
+                        icon: "fas fa-address-book",
+                        content: [
+                            { label: "Мобильный телефон", value: "+7 (915) 461-10-39" }
+                        ]
+                    },
+                    {
+                        title: "Предполагаемая информация",
+                        icon: "fas fa-home",
+                        content: [
+                            { label: "Место проживания", value: "г. Москва, ул. Тарханская, д. 3, корп. 2, кв. 256" },
+                            { label: "Статус", value: "Фактический опекун внука" },
+                            { label: "Родственная связь", value: "Мать Петровой (Черкасовой) Я.А." }
+                        ]
+                    }
+                ]
+            },
+            violations: {
+                title: "Нарушения законодательства РФ",
+                role: "Караваев Артем Иванович",
+                icon: "fas fa-gavel",
+                cards: [
+                    {
+                        title: "Общая информация о нарушениях",
+                        icon: "fas fa-exclamation-triangle",
+                        warning: true,
+                        content: [
+                            { label: "Статус дел", value: "<span class='status-active'>АКТИВНЫЕ РАССЛЕДОВАНИЯ</span>" },
+                            { label: "Уровень опасности", value: "<span class='severity-high'>ВЫСОКИЙ</span>" },
+                            { label: "Количество эпизодов", value: "12 подтвержденных нарушений" },
+                            { label: "Период активности", value: "2023-2025 гг." }
+                        ]
+                    },
+                    {
+                        title: "Пропаганда нетрадиционных отношений",
+                        icon: "fas fa-ban",
+                        warning: true,
+                        content: [
+                            { label: "Статья УК РФ", value: "6.21 КоАП РФ (пропаганда)" },
+                            { label: "Статус дела", value: "<span class='status-active'>В производстве</span>" },
+                            { label: "Подразделение", value: "УМВД по ЮВАО" },
+                            { label: "Следователь", value: "Иванов П.С." }
+                        ]
+                    },
+                    {
+                        title: "Жестокое обращение с животными",
+                        icon: "fas fa-paw",
+                        warning: true,
+                        content: [
+                            { label: "Статья УК РФ", value: "ст. 245 УК РФ" },
+                            { label: "Статус дела", value: "<span class='status-active'>Сбор доказательств</span>" },
+                            { label: "Подразделение", value: "УМВД по ЮВАО" },
+                            { label: "Количество эпизодов", value: "5 подтвержденных случаев" }
+                        ]
+                    },
+                    {
+                        title: "Доказательная база",
+                        icon: "fas fa-clipboard-check",
+                        warning: true,
+                        content: [
+                            { label: "Видеоматериалы", value: "8 файлов, 3.4 ГБ" },
+                            { label: "Фотодоказательства", value: "47 снимков" },
+                            { label: "Электронная переписка", value: "скриншоты Telegram" },
+                            { label: "Свидетельские показания", value: "3 человека" }
+                        ]
+                    }
+                ]
+            },
+            connections: {
+                title: "Ключевые наблюдения и связи",
+                role: "Анализ данных",
+                icon: "fas fa-link",
+                cards: [
+                    {
+                        title: "Расхождение адресов",
+                        icon: "fas fa-map-marker-alt",
+                        content: [
+                            { label: "Факт", value: "Мать (Петрова Я.А.) зарегистрирована по тому же адресу, что и сын (ул. Тарханская), но фактически проживает в Реутове." },
+                            { label: "Следствие", value: "Несовершеннолетний Артем проживает с бабушкой." }
+                        ]
+                    },
+                    {
+                        title: "Смена фамилии",
+                        icon: "fas fa-user-edit",
+                        content: [
+                            { label: "Факт", value: "У матери есть отметка о замене водительского удостоверения в связи со сменой фамилии." },
+                            { label: "Предположение", value: "Смена фамилии с Черкасовой на Петрову." }
+                        ]
+                    },
+                    {
+                        title: "Родственная связь",
+                        icon: "fas fa-users",
+                        content: [
+                            { label: "Факт", value: "Черкасова М.А. (бабушка) и Петрова (Черкасова?) Я.А. (мать) имеют одинаковое отчество (Анатольевна)." },
+                            { label: "Вывод", value: "Прямое родство подтверждено." }
+                        ]
+                    },
+                    {
+                        title: "Социальный статус",
+                        icon: "fas fa-heartbeat",
+                        content: [
+                            { label: "Факт", value: "Несовершеннолетний Артем является инвалидом и иждивенцем." },
+                            { label: "Следствие", value: "Проживает в Москве с бабушкой, в то время как мать живет отдельно в Подмосковье и не работает с декабря 2022 года." }
+                        ]
+                    }
+                ]
+            },
+            additional: {
+                title: "Дополнительная информация",
+                role: "Важные данные из источников",
+                icon: "fas fa-info-circle",
+                cards: [
+                    {
+                        title: "Ключевые данные Петровой Я.А.",
+                        icon: "fas fa-female",
+                        content: [
+                            { label: "Образование", value: "Высшее, Московский городской педагогический университет (2008)" },
+                            { label: "Профессия", value: "Учитель Технология и предпринимательство" },
+                            { label: "Желаемая должность", value: "Директор по персоналу" },
+                            { label: "Ожидаемая зарплата", value: "150 000 руб." }
+                        ]
+                    },
+                    {
+                        title: "Социальные сети и контакты",
+                        icon: "fas fa-share-alt",
+                        content: [
+                            { label: "ВКонтакте", value: "Артём Потато (id589337367)" },
+                            { label: "Telegram", value: "@potato463 (Артём Потато🥛)" },
+                            { label: "Youla", value: "Belij Leha" },
+                            { label: "Trudvsem.ru", value: "Активный поиск работы" }
+                        ]
+                    },
+                    {
+                        title: "Финансовая информация",
+                        icon: "fas fa-credit-card",
+                        content: [
+                            { label: "Банковские услуги", value: "Озон Счёт (Еком Банк)" },
+                            { label: "Недвижимость", value: "Квартира 58.2 кв.м (Тарханская ул.)" },
+                            { label: "Кадастровый номер", value: "77:04:0005009:5717" },
+                            { label: "Стоимость недвижимости", value: "~8-10 млн руб." }
+                        ]
+                    },
+                    {
+                        title: "Медицинская информация",
+                        icon: "fas fa-hospital",
+                        content: [
+                            { label: "Медицинские учреждения", value: "Полимедика, Гемотест" },
+                            { label: "Страховая компания", value: "СОГАЗ-МЕД" },
+                            { label: "Номер полиса ОМС", value: "7750410886002151" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Инициализация страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const cardsContainer = document.getElementById('cards-container');
+            const navButtons = document.querySelectorAll('.nav-btn');
+            
+            let currentPerson = 'artem';
+            
+            // Функция отображения карточек
+            function displayCards(person) {
+                cardsContainer.innerHTML = '';
+                const personData = data[person];
+                
+                if (!personData) return;
+                
+                // Добавляем фотографию профиля
+                if (personData.photo) {
+                    const photoCard = document.createElement('div');
+                    photoCard.className = 'card';
+                    photoCard.style.animationDelay = '0s';
+                    
+                    photoCard.innerHTML = `
+                        <div class="card-header">
+                            <div class="card-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="card-title">Фотография профиля</div>
+                        </div>
+                        <div class="card-body" style="text-align: center;">
+                            <img src="${personData.photo}" alt="${personData.title}" class="person-photo">
+                            <div class="info-row">
+                                <div class="info-label">Идентификация</div>
+                                <div class="info-value">Подтверждено: ${personData.title}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    cardsContainer.appendChild(photoCard);
+                }
+                
+                personData.cards.forEach((card, index) => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card';
+                    if (card.warning) cardElement.classList.add('warning');
+                    cardElement.style.animationDelay = `${(index + 1) * 0.1}s`;
+                    
+                    const cardHeaderClass = card.warning ? 'card-header warning' : 'card-header';
+                    
+                    cardElement.innerHTML = `
+                        <div class="${cardHeaderClass}">
+                            <div class="card-icon">
+                                <i class="${card.icon}"></i>
+                            </div>
+                            <div class="card-title">${card.title}</div>
+                        </div>
+                        <div class="card-body">
+                            ${card.content.map(item => {
+                                const rowClass = card.warning ? 'info-row warning' : 'info-row';
+                                return `
+                                <div class="${rowClass}">
+                                    <div class="info-label">${item.label}</div>
+                                    <div class="info-value">${item.value}</div>
+                                </div>
+                                `;
+                            }).join('')}
+                            ${person === 'violations' && card.title === 'Пропаганда нетрадиционных отношений' ? `
+                                <div class="law-article warning">
+                                    <h4>Статья 6.21 КоАП РФ</h4>
+                                    <p>Пропаганда нетрадиционных сексуальных отношений среди несовершеннолетних, выражающаяся в распространении информации, направленной на формирование у несовершеннолетних нетрадиционных сексуальных установок.</p>
+                                </div>
+                                <h4>Доказательства:</h4>
+                                <ul class="evidence-list">
+                                    <li>Видео в TikTok с демонстрацией фембой-атрибутики (3 ролика)</li>
+                                    <li>Публикации в Telegram-канале с 2,4 тыс. подписчиков</li>
+                                    <li>Распространение материалов среди одноклассников</li>
+                                </ul>
+                            ` : ''}
+                            ${person === 'violations' && card.title === 'Жестокое обращение с животными' ? `
+                                <div class="law-article warning">
+                                    <h4>Статья 245 УК РФ</h4>
+                                    <p>Жестокое обращение с животными в целях причинения им боли и (или) страданий, а равно из хулиганских побуждений, повлекшее их гибель или увечье.</p>
+                                </div>
+                                <h4>Доказательства:</h4>
+                                <ul class="evidence-list">
+                                    <li>Видео с издевательствами над бездомными кошками (2 эпизода)</li>
+                                    <li>Фотографии с признаками насилия над животными</li>
+                                    <li>Показания соседей о жестоком обращении с домашним котом</li>
+                                    <li>Медицинское заключение ветеринара о травмах животного</li>
+                                </ul>
+                            ` : ''}
+                            ${person === 'additional' ? `
+                                <div class="additional-info">
+                                    <h4>Источник данных:</h4>
+                                    <p>Информация собрана из открытых источников: Росреестр, ФНС, ФОМС, МВД, социальные сети и базы данных за 2018-2025 гг.</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                    
+                    cardsContainer.appendChild(cardElement);
+                });
+                
+                // Обновляем активную кнопку
+                navButtons.forEach(btn => {
+                    if (btn.dataset.target === person) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Инициализация отображения карточек
+            displayCards(currentPerson);
+            
+            // Обработчики для кнопок навигации
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currentPerson = this.dataset.target;
+                    displayCards(currentPerson);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
