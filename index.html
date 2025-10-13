@@ -3,1330 +3,1376 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>База данных - Семейство Караваев/Петрова/Черкасова</title>
+    <title>Лазерные технологии и их использование | Проект Кондрашова В.С.</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #8a2be2;
+            --secondary-color: #00ffff;
+            --accent-color: #ff00ff;
+            --dark-color: #0a0a1a;
+            --darker-color: #050510;
+            --card-bg: rgba(20, 20, 40, 0.7);
+            --text-color: #e0e0ff;
+            --text-muted: #a0a0c0;
+            --neon-glow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color), 0 0 30px var(--accent-color);
+            --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        :root {
-            --primary: #8b0000;
-            --primary-dark: #5a0000;
-            --primary-light: #b22222;
-            --secondary: #0a0a0a;
-            --accent: #ff4444;
-            --text: #e0e0e0;
-            --text-secondary: #a0a0a0;
-            --card-bg: rgba(20, 20, 20, 0.85);
-            --transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            --warning: #ff4444;
-            --warning-dark: #cc0000;
-            --neon-red: #ff073a;
-            --neon-glow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red), 0 0 30px var(--neon-red);
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap');
-
+        
         body {
-            background: 
-                radial-gradient(circle at 20% 30%, #1a0000 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, #0a0000 0%, transparent 50%),
-                linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: var(--text);
+            background: linear-gradient(135deg, var(--darker-color), var(--dark-color));
+            color: var(--text-color);
+            line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
         }
-
-        /* Мрачный анимированный фон с векторными элементами */
+        
+        /* Анимированный фон */
         .bg-animation {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            overflow: hidden;
+            z-index: -1;
             opacity: 0.3;
         }
-
-        /* Стили для векторных крестов */
-        .vector-cross {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            opacity: 0.1;
-            animation: floatCross 40s infinite linear;
-            filter: drop-shadow(0 0 5px var(--neon-red));
-        }
-
-        .vector-cross::before, .vector-cross::after {
-            content: '';
-            position: absolute;
-            background: var(--neon-red);
-            border-radius: 2px;
-        }
-
-        .vector-cross::before {
-            width: 6px;
-            height: 40px;
-            left: 50%;
-            top: 0;
-            transform: translateX(-50%);
-            box-shadow: var(--neon-glow);
-        }
-
-        .vector-cross::after {
-            width: 40px;
-            height: 6px;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            box-shadow: var(--neon-glow);
-        }
-
-        /* Стили для векторных черепов */
-        .vector-skull {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            opacity: 0.08;
-            animation: floatSkull 35s infinite linear;
-            filter: drop-shadow(0 0 8px var(--neon-red));
-        }
-
-        .vector-skull::before {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            top: 5px;
-            left: 5px;
-            background: transparent;
-            border: 3px solid var(--neon-red);
-            border-radius: 50%;
-            box-shadow: var(--neon-glow);
-        }
-
-        .vector-skull::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 20px;
-            bottom: 5px;
-            left: 10px;
-            background: transparent;
-            border-bottom: 3px solid var(--neon-red);
-            border-left: 3px solid var(--neon-red);
-            border-right: 3px solid var(--neon-red);
-            border-radius: 0 0 15px 15px;
-            box-shadow: var(--neon-glow);
-        }
-
-        .vector-cross:nth-child(1) {
-            top: 15%;
-            left: 8%;
-            animation-duration: 45s;
-        }
-
-        .vector-cross:nth-child(2) {
-            top: 65%;
-            right: 12%;
-            animation-duration: 50s;
-            animation-direction: reverse;
-        }
-
-        .vector-cross:nth-child(3) {
-            bottom: 25%;
-            left: 15%;
-            animation-duration: 55s;
-        }
-
-        .vector-skull:nth-child(4) {
-            top: 35%;
-            right: 18%;
-            animation-duration: 40s;
-        }
-
-        .vector-skull:nth-child(5) {
-            bottom: 45%;
-            left: 12%;
-            animation-duration: 60s;
-            animation-direction: reverse;
-        }
-
-        .vector-skull:nth-child(6) {
-            top: 75%;
-            left: 80%;
-            animation-duration: 65s;
-        }
-
-        @keyframes floatSkull {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(25px, 15px) rotate(90deg);
-            }
-            50% {
-                transform: translate(0, 30px) rotate(180deg);
-            }
-            75% {
-                transform: translate(-25px, 15px) rotate(270deg);
-            }
-            100% {
-                transform: translate(0, 0) rotate(360deg);
-            }
-        }
-
-        @keyframes floatCross {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(-18px, 22px) rotate(-90deg);
-            }
-            50% {
-                transform: translate(0, -35px) rotate(-180deg);
-            }
-            75% {
-                transform: translate(18px, 22px) rotate(-270deg);
-            }
-            100% {
-                transform: translate(0, 0) rotate(-360deg);
-            }
-        }
-
-        /* Основной контейнер */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Заголовок с неоновым эффектом */
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 30px;
-            background: 
-                radial-gradient(circle at top left, rgba(139, 0, 0, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at bottom right, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
-                rgba(10, 10, 10, 0.9);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(139, 0, 0, 0.5);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.7),
-                inset 0 0 50px rgba(139, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 1.5s ease-out;
-        }
-
-        .header::before {
+        
+        .bg-animation::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--primary), var(--accent), var(--primary), transparent);
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #fff, var(--primary-light), #ff6b6b, #fff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 15px rgba(139, 0, 0, 0.7);
-            letter-spacing: 2px;
-            position: relative;
-        }
-
-        .header p {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-
-        /* Панель навигации с неоновыми элементами */
-        .nav-panel {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 50px;
-            position: relative;
-        }
-
-        .nav-panel::before {
-            content: '';
-            position: absolute;
-            left: -40px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
-            border: 2px solid var(--neon-red);
-            border-radius: 50%;
-            box-shadow: var(--neon-glow);
-            opacity: 0.6;
-        }
-
-        .nav-panel::after {
-            content: '';
-            position: absolute;
-            right: -40px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 30px;
-            height: 30px;
-            border: 2px solid var(--neon-red);
-            border-radius: 50%;
-            box-shadow: var(--neon-glow);
-            opacity: 0.6;
-        }
-
-        .nav-btn {
-            background: 
-                radial-gradient(circle at top left, rgba(139, 0, 0, 0.4) 0%, transparent 70%),
-                var(--card-bg);
-            border: none;
-            color: var(--text);
-            padding: 18px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: var(--transition);
-            box-shadow: 
-                0 5px 15px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(139, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 1px;
-        }
-
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(139, 0, 0, 0.2), transparent);
-            transition: var(--transition);
-        }
-
-        .nav-btn:hover::before {
-            left: 100%;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 
-                0 10px 25px rgba(139, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border-color: var(--primary);
-            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 
-                0 10px 25px rgba(139, 0, 0, 0.6),
-                0 0 20px rgba(139, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            border-color: var(--accent);
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .nav-btn.warning {
-            background: linear-gradient(135deg, var(--warning-dark), var(--warning));
-            border-color: rgba(255, 68, 68, 0.5);
-            animation: pulseWarning 2s infinite;
-            position: relative;
-        }
-
-        .nav-btn.warning::after {
-            content: '';
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 20px;
-            height: 20px;
-            background: var(--neon-red);
-            border-radius: 50%;
-            animation: spin 3s infinite linear;
-            box-shadow: var(--neon-glow);
-        }
-
-        .nav-btn.warning:hover {
-            box-shadow: 
-                0 10px 25px rgba(255, 68, 68, 0.6),
-                0 0 20px rgba(255, 68, 68, 0.4);
-            border-color: var(--warning);
-        }
-
-        .nav-btn.warning.active {
-            background: linear-gradient(135deg, var(--warning), var(--warning-dark));
-            box-shadow: 
-                0 10px 25px rgba(255, 68, 68, 0.8),
-                0 0 25px rgba(255, 68, 68, 0.6);
-        }
-
-        @keyframes pulseWarning {
-            0%, 100% {
-                box-shadow: 
-                    0 5px 15px rgba(255, 68, 68, 0.4),
-                    0 0 10px rgba(255, 68, 68, 0.3);
-            }
-            50% {
-                box-shadow: 
-                    0 5px 20px rgba(255, 68, 68, 0.8),
-                    0 0 15px rgba(255, 68, 68, 0.6);
-            }
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Карточки с неоновыми эффектами */
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .card {
             background: 
-                radial-gradient(circle at top right, rgba(139, 0, 0, 0.2) 0%, transparent 50%),
-                var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 
-                0 10px 25px rgba(0, 0, 0, 0.6),
-                inset 0 0 30px rgba(139, 0, 0, 0.1);
-            transition: var(--transition);
-            border: 1px solid rgba(139, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(30px) scale(0.95);
-            animation: cardAppear 0.8s forwards;
-            position: relative;
+                radial-gradient(circle at 20% 80%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+            animation: pulse 15s ease-in-out infinite;
         }
-
-        .card::before {
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        
+        header {
+            background: linear-gradient(135deg, rgba(10, 10, 26, 0.9), rgba(20, 20, 40, 0.7));
+            color: var(--text-color);
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            opacity: 0;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), var(--accent-color), transparent);
+            animation: header-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes header-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            color: var(--text-muted);
+        }
+        
+        .student-info {
+            background: rgba(30, 30, 60, 0.5);
+            padding: 18px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: var(--transition);
         }
-
-        .card:hover::before {
-            opacity: 1;
+        
+        .student-info:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 5px 20px rgba(255, 0, 255, 0.3);
         }
-
-        .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 
-                0 15px 35px rgba(139, 0, 0, 0.5),
-                0 0 30px rgba(139, 0, 0, 0.3),
-                inset 0 0 30px rgba(139, 0, 0, 0.1);
-            border-color: var(--primary);
+        
+        nav {
+            background: rgba(10, 10, 26, 0.9);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
         }
-
-        .card.warning {
-            border-color: rgba(255, 68, 68, 0.5);
-            box-shadow: 
-                0 10px 25px rgba(255, 68, 68, 0.3),
-                inset 0 0 30px rgba(255, 68, 68, 0.1);
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-
-        .card.warning:hover {
-            box-shadow: 
-                0 15px 35px rgba(255, 68, 68, 0.5),
-                0 0 30px rgba(255, 68, 68, 0.3),
-                inset 0 0 30px rgba(255, 68, 68, 0.1);
-            border-color: var(--warning);
+        
+        nav li {
+            padding: 18px 22px;
+            position: relative;
         }
-
-        .card-header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            padding: 25px 20px;
+        
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            font-size: 1.05rem;
+            position: relative;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        nav a:hover {
+            color: var(--secondary-color);
+            text-shadow: 0 0 10px var(--secondary-color);
+        }
+        
+        nav li::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+        
+        nav li:hover::after {
+            width: 80%;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 20px;
+            display: flex;
+            gap: 30px;
+        }
+        
+        .main-content {
+            flex: 1;
+        }
+        
+        .theme-sidebar {
+            width: 280px;
+            position: sticky;
+            top: 100px;
+            align-self: flex-start;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+        
+        .theme-menu {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+        
+        .theme-menu:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .theme-menu h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+            font-size: 1.3rem;
+            text-shadow: 0 0 5px var(--secondary-color);
+        }
+        
+        .theme-list {
+            list-style: none;
+        }
+        
+        .theme-list li {
+            margin-bottom: 10px;
+        }
+        
+        .theme-list a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: 8px;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            background: rgba(30, 30, 60, 0.3);
+        }
+        
+        .theme-list a:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid var(--secondary-color);
+            padding-left: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .theme-list a.active {
+            background: rgba(0, 255, 255, 0.15);
+            border-left: 3px solid var(--accent-color);
+            color: var(--secondary-color);
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .quick-facts {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+        
+        .quick-facts:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        .quick-facts h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+            font-size: 1.3rem;
+            text-shadow: 0 0 5px var(--secondary-color);
+        }
+        
+        .fact-item {
             display: flex;
             align-items: center;
-            gap: 15px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: var(--transition);
+            background: rgba(30, 30, 60, 0.3);
+        }
+        
+        .fact-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .fact-icon {
+            font-size: 1.5rem;
+            margin-right: 12px;
+            color: var(--accent-color);
+            text-shadow: 0 0 5px var(--accent-color);
+        }
+        
+        .fact-text {
+            flex: 1;
+        }
+        
+        section {
+            margin-bottom: 70px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
         }
-
-        .card-header::before {
+        
+        section::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            animation: shine 3s infinite;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
         }
-
-        .card-header.warning {
-            background: linear-gradient(135deg, var(--warning-dark), var(--warning));
+        
+        section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
         }
-
-        .card-icon {
-            font-size: 2rem;
-            background: rgba(255, 255, 255, 0.1);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-title {
-            font-size: 1.4rem;
+        
+        h2 {
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent-color);
+            font-size: 2.2rem;
             font-weight: 700;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .card-body {
-            padding: 25px;
-        }
-
-        .info-row {
-            display: flex;
-            margin-bottom: 18px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
             position: relative;
         }
-
-        .info-row::before {
+        
+        h2::after {
             content: '';
             position: absolute;
-            left: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            background: var(--neon-red);
-            border-radius: 50%;
-            box-shadow: 0 0 5px var(--neon-red);
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary-color), transparent);
         }
-
-        .info-label {
-            color: var(--primary-light);
+        
+        h3 {
+            color: var(--secondary-color);
+            margin: 25px 0 15px;
+            font-size: 1.5rem;
             font-weight: 600;
-            min-width: 160px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
         }
-
-        .info-row.warning .info-label {
-            color: var(--warning);
+        
+        h4 {
+            color: var(--accent-color);
+            margin: 20px 0 10px;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(255, 0, 255, 0.3);
         }
-
-        .info-value {
-            flex: 1;
-            color: var(--text);
+        
+        p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-color);
         }
-
-        /* Дополнительные стили */
-        .evidence-list {
-            list-style-type: none;
-            margin: 20px 0;
-        }
-
-        .evidence-list li {
-            padding: 12px;
-            margin-bottom: 12px;
-            background: rgba(255, 68, 68, 0.1);
-            border-left: 4px solid var(--warning);
-            border-radius: 0 8px 8px 0;
-            position: relative;
-            transition: var(--transition);
-        }
-
-        .evidence-list li:hover {
-            background: rgba(255, 68, 68, 0.2);
-            transform: translateX(5px);
-        }
-
-        .evidence-list li::before {
-            content: '';
-            position: absolute;
-            left: -25px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            background: var(--neon-red);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--neon-red);
-        }
-
-        .law-article {
-            background: rgba(139, 0, 0, 0.2);
+        
+        .intro-text {
+            font-size: 1.1rem;
+            background: rgba(30, 30, 60, 0.5);
             padding: 20px;
             border-radius: 10px;
-            margin: 20px 0;
-            border-left: 5px solid var(--primary);
+            border-left: 4px solid var(--accent-color);
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .card {
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 12px;
+            padding: 25px;
+            transition: var(--transition);
+            border-left: 4px solid var(--accent-color);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-left-color: var(--secondary-color);
+        }
+        
+        .card h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+        }
+        
+        .card-icon {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+        
+        .image-card {
             position: relative;
             overflow: hidden;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 255, 255, 0.2);
         }
-
-        .law-article::before {
+        
+        .image-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent-color);
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 26, 0.8);
+            color: var(--text-color);
+            padding: 15px;
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        
+        .project-classification {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .classification-item {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(30, 30, 60, 0.5);
+            padding: 25px;
+            border-radius: 12px;
+            border-top: 4px solid var(--primary-color);
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .classification-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border-top-color: var(--accent-color);
+        }
+        
+        .laser-applications {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 35px;
+        }
+        
+        .application {
+            background: rgba(30, 30, 60, 0.5);
+            padding: 25px;
+            border-radius: 12px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .application:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        .application-icon {
+            font-size: 2.8rem;
+            color: var(--accent-color);
+            margin-bottom: 18px;
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+        
+        .application h3 {
+            margin-top: 0;
+        }
+        
+        .application-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+        
+        .gallery-item {
+            height: 220px;
+            background-color: #1a1a3a;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: var(--accent-color);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 26, 0.8);
+            color: white;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .gallery-item:hover .image-caption {
+            transform: translateY(0);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        
+        .timeline::after {
             content: '';
             position: absolute;
-            top: 10px;
-            right: 15px;
-            width: 30px;
-            height: 30px;
-            border: 2px solid var(--neon-red);
+            width: 4px;
+            background: linear-gradient(to bottom, var(--secondary-color), var(--accent-color));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            box-shadow: 0 0 10px var(--secondary-color);
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--dark-color);
+            border: 4px solid var(--accent-color);
+            top: 15px;
             border-radius: 50%;
-            opacity: 0.2;
-            box-shadow: 0 0 10px var(--neon-red);
+            z-index: 1;
+            box-shadow: 0 0 10px var(--accent-color);
         }
-
-        .law-article.warning {
-            background: rgba(255, 68, 68, 0.2);
-            border-left: 5px solid var(--warning);
+        
+        .left {
+            left: 0;
         }
-
-        /* Анимации */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
+        
+        .right {
+            left: 50%;
+        }
+        
+        .left::after {
+            right: -10px;
+        }
+        
+        .right::after {
+            left: -10px;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+        
+        .timeline-content:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .timeline-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .content-block {
+            margin-bottom: 30px;
+        }
+        
+        .content-block:last-child {
+            margin-bottom: 0;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+        
+        .highlight {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .quote {
+            font-style: italic;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 20px;
+            margin: 25px 0;
+            color: var(--text-muted);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 20px;
+            margin: 10px;
+            background: rgba(30, 30, 60, 0.5);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-color);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: block;
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, rgba(10, 10, 26, 0.9), rgba(20, 20, 40, 0.7));
+            color: var(--text-color);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .footer-links a {
+            color: var(--text-color);
+            margin: 0 15px;
+            text-decoration: none;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary-color);
+            text-shadow: 0 0 10px var(--secondary-color);
+            background: rgba(0, 255, 255, 0.1);
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        /* Анимация появления элементов при скролле */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .theme-sidebar {
+                width: 100%;
+                position: static;
+                max-height: none;
+                order: -1;
+            }
+            
+            .theme-menu, .quick-facts {
+                margin-bottom: 30px;
             }
         }
-
-        @keyframes cardAppear {
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* Адаптивность */
+        
         @media (max-width: 768px) {
-            .nav-panel {
+            nav ul {
                 flex-direction: column;
                 align-items: center;
             }
             
-            .nav-btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .cards-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
+            h1 {
                 font-size: 2.2rem;
             }
             
-            .nav-panel::before,
-            .nav-panel::after {
-                display: none;
+            .card-container, .laser-applications {
+                grid-template-columns: 1fr;
             }
-        }
-
-        /* Специальные эффекты */
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        .highlight {
-            background: rgba(139, 0, 0, 0.3);
-            padding: 3px 10px;
-            border-radius: 5px;
-            color: #ff6b6b;
-            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
-        }
-
-        .blood-drop {
-            position: absolute;
-            width: 120px;
-            height: 180px;
-            background: radial-gradient(ellipse at center, var(--primary) 0%, transparent 70%);
-            opacity: 0.1;
-            border-radius: 50% 50% 50% 50%/60% 60% 40% 40%;
-            z-index: -1;
-            animation: dropFall 20s infinite linear;
-            filter: blur(2px);
-        }
-
-        .blood-drop-1 {
-            top: -60px;
-            right: 10%;
-            animation-delay: 0s;
-        }
-
-        .blood-drop-2 {
-            top: -60px;
-            left: 20%;
-            animation-delay: 7s;
-        }
-
-        .blood-drop-3 {
-            top: -60px;
-            right: 30%;
-            animation-delay: 14s;
-        }
-
-        @keyframes dropFall {
-            0% {
-                transform: translateY(-150px) rotate(0deg);
-                opacity: 0;
+            
+            .timeline::after {
+                left: 31px;
             }
-            10% {
-                opacity: 0.1;
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
             }
-            90% {
-                opacity: 0.1;
+            
+            .timeline-item::after {
+                left: 21px;
             }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
+            
+            .right {
+                left: 0;
             }
-        }
-
-        .severity-high {
-            color: var(--warning);
-            font-weight: bold;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
-        }
-
-        .status-active {
-            color: #ff6b6b;
-            font-weight: bold;
-            text-shadow: 0 0 5px rgba(255, 107, 107, 0.5);
-        }
-        
-        .person-photo {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--primary);
-            margin: 0 auto 20px;
-            display: block;
-            box-shadow: 
-                0 0 20px rgba(139, 0, 0, 0.5),
-                inset 0 0 20px rgba(139, 0, 0, 0.3);
-            filter: sepia(0.3) contrast(1.1);
-        }
-        
-        .additional-info {
-            background: rgba(139, 0, 0, 0.15);
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid var(--primary);
-            position: relative;
-        }
-        
-        .additional-info::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 25px;
-            height: 25px;
-            border: 2px solid var(--neon-red);
-            border-radius: 50%;
-            opacity: 0.3;
-            box-shadow: 0 0 8px var(--neon-red);
-        }
-        
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--primary-light);
-            text-decoration: none;
-            margin: 8px 0;
-            transition: var(--transition);
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        
-        .social-link:hover {
-            color: var(--accent);
-            transform: translateX(8px);
-            background: rgba(139, 0, 0, 0.2);
-            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
-        }
-
-        /* Векторные кресты по углам страницы */
-        .corner-cross {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            opacity: 0.1;
-            z-index: -1;
-            filter: drop-shadow(0 0 5px var(--neon-red));
-        }
-
-        .corner-cross::before, .corner-cross::after {
-            content: '';
-            position: absolute;
-            background: var(--neon-red);
-            border-radius: 2px;
-            box-shadow: var(--neon-glow);
-        }
-
-        .corner-cross::before {
-            width: 6px;
-            height: 40px;
-            left: 50%;
-            top: 0;
-            transform: translateX(-50%);
-        }
-
-        .corner-cross::after {
-            width: 40px;
-            height: 6px;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-        }
-
-        .cross-tl {
-            top: 20px;
-            left: 20px;
-        }
-
-        .cross-tr {
-            top: 20px;
-            right: 20px;
-        }
-
-        .cross-bl {
-            bottom: 20px;
-            left: 20px;
-        }
-
-        .cross-br {
-            bottom: 20px;
-            right: 20px;
+            
+            .stats {
+                flex-direction: column;
+            }
+            
+            .stat-item {
+                min-width: auto;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Мрачный анимированный фон с векторными элементами -->
-    <div class="bg-animation">
-        <div class="vector-cross"></div>
-        <div class="vector-cross"></div>
-        <div class="vector-cross"></div>
-        <div class="vector-skull"></div>
-        <div class="vector-skull"></div>
-        <div class="vector-skull"></div>
-        <div class="blood-drop blood-drop-1"></div>
-        <div class="blood-drop blood-drop-2"></div>
-        <div class="blood-drop blood-drop-3"></div>
-    </div>
-
-    <!-- Векторные кресты по углам -->
-    <div class="corner-cross cross-tl"></div>
-    <div class="corner-cross cross-tr"></div>
-    <div class="corner-cross cross-bl"></div>
-    <div class="corner-cross cross-br"></div>
-
+    <div class="bg-animation"></div>
+    
+    <header>
+        <div class="header-content">
+            <h1>Лазерные технологии и их использование</h1>
+            <p class="subtitle">Исследовательский проект по современным технологиям</p>
+            <div class="student-info">
+                <p><strong>Кондрашов Владислав Сергеевич</strong></p>
+                <p>Студент 1 курса группы 1-БАС-9-13</p>
+                <p>Колледж №54</p>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#about">О проекте</a></li>
+            <li><a href="#laser-tech">Лазерные технологии</a></li>
+            <li><a href="#history">История</a></li>
+            <li><a href="#applications">Применение</a></li>
+            <li><a href="#classification">Классификация проекта</a></li>
+            <li><a href="#gallery">Галерея</a></li>
+            <li><a href="#conclusion">Выводы</a></li>
+        </ul>
+    </nav>
+    
     <div class="container">
-        <!-- Заголовок -->
-        <header class="header">
-            <h1><i class="fas fa-database"></i> БАЗА ДАННЫХ</h1>
-            <p>Семейство Караваев/Петрова/Черкасова | Обновлено: Сентябрь 2025</p>
-        </header>
-
-        <!-- Панель навигации -->
-        <div class="nav-panel">
-            <button class="nav-btn active" data-target="artem">
-                <i class="fas fa-male"></i> Караваев А.И.
-            </button>
-            <button class="nav-btn" data-target="mother">
-                <i class="fas fa-female"></i> Петрова Я.А.
-            </button>
-            <button class="nav-btn" data-target="grandmother">
-                <i class="fas fa-user-alt"></i> Черкасова М.А.
-            </button>
-            <button class="nav-btn warning pulse" data-target="violations">
-                <i class="fas fa-gavel"></i> Нарушения РФ
-            </button>
-            <button class="nav-btn" data-target="connections">
-                <i class="fas fa-link"></i> Связи
-            </button>
-            <button class="nav-btn" data-target="additional">
-                <i class="fas fa-info-circle"></i> Доп. информация
-            </button>
+        <div class="main-content">
+            <section id="about" class="fade-in">
+                <h2>О проекте</h2>
+                <div class="intro-text">
+                    <p>Данный проект посвящен изучению лазерных технологий и их практического применения в различных сферах человеческой деятельности. Лазерные технологии являются одним из ключевых направлений современной науки и техники, оказывающих значительное влияние на развитие промышленности, медицины, связи и других областей.</p>
+                </div>
+                
+                <h3>Цели и задачи проекта</h3>
+                <div class="content-block">
+                    <p><strong>Основная цель проекта:</strong> изучить принципы работы лазеров, их виды и области применения, а также оценить перспективы развития лазерных технологий в будущем.</p>
+                    
+                    <h4>Задачи исследования:</h4>
+                    <ul>
+                        <li>Изучить физические принципы работы лазеров и их классификацию</li>
+                        <li>Проанализировать современные области применения лазерных технологий</li>
+                        <li>Выявить преимущества и ограничения использования лазеров в различных отраслях</li>
+                        <li>Оценить перспективы развития лазерных технологий</li>
+                        <li>Создать информационный ресурс по теме исследования</li>
+                    </ul>
+                </div>
+                
+                <div class="image-card">
+                    <img src="https://storage.imgbly.com/imgbly/O95iXSVNnr.jpeg" alt="Лазерные технологии в промышленности">
+                    <div class="image-caption">Лазерные технологии широко применяются в современной промышленности</div>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Актуальность темы</h3>
+                    <p>Лазерные технологии сегодня проникли практически во все сферы человеческой деятельности — от медицины и промышленности до развлечений и бытовой техники. Понимание принципов их работы и областей применения необходимо для специалистов различных технических профессий, что делает данное исследование особенно актуальным.</p>
+                    
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-value">1960</span>
+                            <span class="stat-label">Год создания первого лазера</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">15%</span>
+                            <span class="stat-label">Среднегодовой рост рынка лазерных технологий</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">100+</span>
+                            <span class="stat-label">Областей применения лазеров</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="laser-tech" class="fade-in">
+                <h2>Лазерные технологии</h2>
+                <p>Лазер (Light Amplification by Stimulated Emission of Radiation) — это устройство, создающее когерентное, монохроматическое и направленное излучение. Основные принципы работы лазера были предложены Альбертом Эйнштейном еще в 1917 году, но первый работающий лазер был создан Теодором Майманом только в 1960 году.</p>
+                
+                <div class="image-card">
+                    <img src="https://storage.imgbly.com/imgbly/BZ4qnBK3yM.jpeg" alt="Лазерный луч">
+                    <div class="image-caption">Лазерный луч - когерентное и монохроматическое излучение</div>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Физические принципы работы лазера</h3>
+                    <p>В основе работы лазера лежит процесс вынужденного излучения, когда фотон, сталкиваясь с возбужденным атомом, вызывает испускание идентичного фотона, что приводит к усилению светового потока. Этот процесс происходит в активной среде, которая может быть твердотельной, газовой, жидкостной или полупроводниковой.</p>
+                    
+                    <p>Ключевыми компонентами любого лазера являются:</p>
+                    <ul>
+                        <li><strong>Активная среда</strong> — вещество, в котором создается инверсия населенностей и происходит усиление света</li>
+                        <li><strong>Система накачки</strong> — источник энергии для создания инверсии населенностей в активной среде</li>
+                        <li><strong>Оптический резонатор</strong> — система зеркал, обеспечивающая многократное прохождение излучения через активную среду и формирование направленного пучка</li>
+                    </ul>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Свойства лазерного излучения</h3>
+                    <p>Лазерное излучение обладает уникальными свойствами, которые отличают его от других источников света:</p>
+                    
+                    <div class="card-container">
+                        <div class="card">
+                            <div class="card-icon">⚡</div>
+                            <h4>Когерентность</h4>
+                            <p>Все фотоны в лазерном пучке имеют одинаковую фазу, что позволяет получать интерференционные картины и использовать лазеры в прецизионных измерениях.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">🎯</div>
+                            <h4>Направленность</h4>
+                            <p>Лазерный пучок имеет очень малую расходимость, что позволяет передавать энергию на большие расстояния с минимальными потерями.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">🌈</div>
+                            <h4>Монохроматичность</h4>
+                            <p>Лазерное излучение имеет очень узкий спектральный состав, что важно для спектроскопии и многих технологических применений.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Классификация лазеров</h3>
+                    <p>Существуют различные типы лазеров, классифицируемые по разным признакам:</p>
+                    
+                    <div class="image-card">
+                        <img src="https://storage.imgbly.com/imgbly/GCrdDbvfWL.jpeg" alt="Различные типы лазеров">
+                        <div class="image-caption">Различные типы лазеров: твердотельные, газовые, полупроводниковые</div>
+                    </div>
+                    
+                    <h4>По типу активной среды:</h4>
+                    <ul>
+                        <li><strong>Твердотельные лазеры</strong> — используют кристаллы или стекла с примесями ионов (рубиновый, неодимовый)</li>
+                        <li><strong>Газовые лазеры</strong> — используют газы или смеси газов (гелий-неоновый, аргоновый, CO₂-лазер)</li>
+                        <li><strong>Жидкостные лазеры</strong> — используют растворы органических красителей</li>
+                        <li><strong>Полупроводниковые лазеры</strong> — используют полупроводниковые материалы (лазерные диоды)</li>
+                        <li><strong>Эксимерные лазеры</strong> — используют димерные молекулы, существующие только в возбужденном состоянии</li>
+                    </ul>
+                    
+                    <h4>По режиму работы:</h4>
+                    <ul>
+                        <li><strong>Непрерывные лазеры</strong> — генерируют излучение постоянной мощности</li>
+                        <li><strong>Импульсные лазеры</strong> — генерируют короткие импульсы высокой мощности</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="history" class="fade-in">
+                <h2>История развития лазерных технологий</h2>
+                <p>Развитие лазерных технологий — это увлекательная история научных открытий и инженерных достижений, которые радикально изменили многие области науки и техники.</p>
+                
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/800px-Albert_Einstein_Head.jpg" alt="Альберт Эйнштейн" class="timeline-image">
+                            <h3>1917 год</h3>
+                            <p>Альберт Эйнштейн теоретически предсказал явление вынужденного излучения — физическую основу работы лазера.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <img src="https://storage.imgbly.com/imgbly/YJ68mASInD.jpeg" alt="Первый лазер" class="timeline-image">
+                            <h3>1954 год</h3>
+                            <p>Чарльз Таунс и Артур Шавлов создали первый мазер (квантовый генератор, работающий в микроволновом диапазоне).</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <img src="https://storage.imgbly.com/imgbly/YJ68mASInD.jpeg" alt="Первый лазер" class="timeline-image">
+                            <h3>1960 год</h3>
+                            <p>Теодор Майман создал первый работающий лазер на рубиновом кристалле, который генерировал импульсное излучение.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <img src="https://storage.imgbly.com/imgbly/DeFXpOPouS.jpeg" alt="Газовый лазер" class="timeline-image">
+                            <h3>1961 год</h3>
+                            <p>Создан первый газовый лазер (гелий-неоновый) и первый лазер на неодимовом стекле.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <img src="https://storage.imgbly.com/imgbly/gMr6Rgggwf.jpeg" alt="Полупроводниковый лазер" class="timeline-image">
+                            <h3>1962 год</h3>
+                            <p>Разработан первый полупроводниковый лазер, открывший путь к миниатюризации лазерных устройств.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <img src="https://storage.imgbly.com/imgbly/NMU0krobUj.jpeg" alt="Лазер в медицине" class="timeline-image">
+                            <h3>1970-е годы</h3>
+                            <p>Начало широкого практического применения лазеров в промышленности, медицине и связи.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <img src="https://storage.imgbly.com/imgbly/FASPGBSqvQ.jpeg" alt="Лазерные принтеры" class="timeline-image">
+                            <h3>1980-е годы</h3>
+                            <p>Появление лазерных принтеров, CD-проигрывателей и волоконно-оптической связи.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <img src="https://storage.imgbly.com/imgbly/7VaRVjRSOR.jpeg" alt="Современные лазеры" class="timeline-image">
+                            <h3>2000-е годы - настоящее время</h3>
+                            <p>Бурное развитие волоконных лазеров, лазерной 3D-печати, лазерной медицины и нанотехнологий.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <p>За шесть десятилетий своего существования лазерные технологии прошли путь от лабораторных экспериментов до массового применения в самых различных областях человеческой деятельности. Сегодня лазеры стали неотъемлемой частью современной техники и технологии.</p>
+                </div>
+            </section>
+            
+            <section id="applications" class="fade-in">
+                <h2>Применение лазерных технологий</h2>
+                <p>Лазерные технологии нашли широкое применение в различных отраслях промышленности, медицины, науки и бытовой техники. Ниже представлены основные направления использования лазеров.</p>
+                
+                <div class="laser-applications">
+                    <div class="application">
+                        <div class="application-icon">🏭</div>
+                        <h3>Промышленность и материалы</h3>
+                        <img src="https://storage.imgbly.com/imgbly/vg9CTahBPG.jpeg" alt="Лазерная резка" class="application-image">
+                        <p>Лазеры используются для резки, сварки, гравировки и маркировки материалов, а также для точных измерений и контроля качества продукции. Лазерная резка позволяет обрабатывать металлы, пластики, ткани с высокой точностью и минимальными отходами.</p>
+                        <p>Лазерная сварка обеспечивает высококачественные соединения в микроэлектронике и аэрокосмической промышленности. Лазерная маркировка используется для нанесения несмываемых кодов и идентификаторов на различные изделия.</p>
+                    </div>
+                    <div class="application">
+                        <div class="application-icon">🏥</div>
+                        <h3>Медицина и хирургия</h3>
+                        <img src="https://storage.imgbly.com/imgbly/C0yJ8C69DW.jpeg" alt="Лазерная хирургия" class="application-image">
+                        <p>В медицине лазеры применяются в хирургии, офтальмологии, дерматологии, стоматологии и для диагностики заболеваний. Лазерная хирургия позволяет выполнять бескровные операции с минимальным повреждением окружающих тканей.</p>
+                        <p>В офтальмологии лазеры используются для коррекции зрения (LASIK), лечения отслоения сетчатки и глаукомы. В дерматологии — для удаления опухолей, татуировок и косметических процедур.</p>
+                    </div>
+                    <div class="application">
+                        <div class="application-icon">💻</div>
+                        <h3>Информационные технологии</h3>
+                        <img src="https://storage.imgbly.com/imgbly/IHXHW2ismo.jpeg" alt="Волоконно-оптическая связь" class="application-image">
+                        <p>Лазеры являются основой для устройств хранения и чтения информации (CD, DVD, Blu-ray), а также для волоконно-оптической связи. Лазерные принтеры и сканеры стали стандартом в офисной технике.</p>
+                        <p>Волоконно-оптические системы связи используют лазеры для передачи информации на большие расстояния с высокой скоростью. Лазерные мыши и сканеры штрих-кодов — примеры повседневного применения лазеров.</p>
+                    </div>
+                    <div class="application">
+                        <div class="application-icon">🔬</div>
+                        <h3>Научные исследования</h3>
+                        <img src="https://storage.imgbly.com/imgbly/KXqrINZgBN.jpeg" alt="Лазер в науке" class="application-image">
+                        <p>В научных исследованиях лазеры используются для спектроскопии, интерферометрии, изучения химических реакций и многих других целей. Лазерная спектроскопия позволяет изучать структуру молекул с высокой точностью.</p>
+                        <p>В физике высоких энергий лазеры используются для ускорения частиц, в химии — для исследования сверхбыстрых химических реакций, в биологии — для изучения клеточных процессов.</p>
+                    </div>
+                    <div class="application">
+                        <div class="application-icon">🎯</div>
+                        <h3>Военная техника и безопасность</h3>
+                        <img src="https://storage.imgbly.com/imgbly/CetWts0ycm.jpeg" alt="Лазер в военной технике" class="application-image">
+                        <p>Лазеры находят применение в системах наведения, дальномерах, целеуказателях и системах противоракетной обороны. Лазерные системы целеуказания повышают точность оружия.</p>
+                        <p>Лазерные дальномеры используются в геодезии, навигации и военной технике. Лазерные системы защиты транспортных средств от управляемых ракет — пример современного военного применения.</p>
+                    </div>
+                    <div class="application">
+                        <div class="application-icon">🛒</div>
+                        <h3>Бытовая техника и развлечения</h3>
+                        <img src="https://storage.imgbly.com/imgbly/GvI3zPM0N2.jpeg" alt="Лазерные проекторы" class="application-image">
+                        <p>Лазерные принтеры, сканеры штрих-кодов, лазерные указки и проекторы - все это примеры бытового применения лазерных технологий. Лазерные проекторы создают яркие и четкие изображения.</p>
+                        <p>Лазерные шоу и световые представления стали популярным развлечением. Лазерные указки используются в презентациях и астрономии. Лазерные уровни и нивелиры — в строительстве и ремонте.</p>
+                    </div>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Перспективные направления</h3>
+                    <p>Среди перспективных направлений развития лазерных технологий можно выделить:</p>
+                    <ul>
+                        <li><strong>Лазерная 3D-печать</strong> — создание сложных деталей послойным наплавлением или спеканием материалов</li>
+                        <li><strong>Лазерное охлаждение</strong> — достижение сверхнизких температур для исследований в квантовой физике</li>
+                        <li><strong>Лазерный термоядерный синтез</strong> — перспективный способ получения энергии</li>
+                        <li><strong>Лазерная обработка наноматериалов</strong> — создание и модификация материалов с наноразмерной структурой</li>
+                        <li><strong>Квантовые вычисления</strong> — использование лазеров для управления кубитами в квантовых компьютерах</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <section id="classification" class="fade-in">
+                <h2>Классификация проекта</h2>
+                <p>Согласно предоставленным классификациям, данный проект можно отнести к следующим категориям:</p>
+                
+                <div class="project-classification">
+                    <div class="classification-item">
+                        <h3>По сфере деятельности</h3>
+                        <p><strong>Технический проект</strong> - посвящен изучению технических аспектов лазерных технологий и их практического применения. Лазерные технологии относятся к области высоких технологий и инноваций.</p>
+                    </div>
+                    <div class="classification-item">
+                        <h3>По методу</h3>
+                        <p><strong>Исследовательский проект</strong> - включает изучение теоретических основ и анализ практического применения лазерных технологий. Проект сочетает теоретическое исследование с анализом практических применений.</p>
+                    </div>
+                    <div class="classification-item">
+                        <h3>По масштабу</h3>
+                        <p><strong>Мини-проект (индивидуальный)</strong> - выполняется одним студентом в рамках учебного курса. Проект имеет ограниченные сроки выполнения и направлен на освоение учебного материала.</p>
+                    </div>
+                </div>
+                
+                <div class="project-classification">
+                    <div class="classification-item">
+                        <h3>По предметно-содержательной области</h3>
+                        <p><strong>Монопроект</strong> - выполняется в рамках одной области знаний (лазерные технологии). Проект фокусируется на глубоком изучении конкретной технологической области.</p>
+                    </div>
+                    <div class="classification-item">
+                        <h3>Продукт проекта</h3>
+                        <p><strong>Веб-сайт</strong> - как современная форма представления информационного проекта с элементами интерактивности. Сайт позволяет эффективно представить информацию и сделать ее доступной для широкой аудитории.</p>
+                    </div>
+                    <div class="classification-item">
+                        <h3>По комплексности</h3>
+                        <p><strong>Средней сложности</strong> - проект сочетает теоретическое исследование с созданием практического продукта (веб-сайта). Требует применения знаний из различных областей: физики, информатики, веб-дизайна.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="gallery" class="fade-in">
+                <h2>Галерея применения лазерных технологий</h2>
+                <p>Визуальные примеры применения лазерных технологий в различных областях:</p>
+                
+                <div class="gallery">
+                    <div class="gallery-item">
+                        <img src="https://storage.imgbly.com/imgbly/o9GNxdQifm.jpeg" alt="Лазерная резка металла">
+                        <div class="image-caption">Лазерная резка металла на промышленном предприятии</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://storage.imgbly.com/imgbly/C0yJ8C69DW.jpeg" alt="Лазерная хирургия">
+                        <div class="image-caption">Применение лазера в офтальмологической хирургии</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://storage.imgbly.com/imgbly/vg9CTahBPG.jpeg" alt="Лазерная резка">
+                        <div class="image-caption">Лазерная резка различных материалов</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://storage.imgbly.com/imgbly/IHXHW2ismo.jpeg" alt="Волоконно-оптическая связь">
+                        <div class="image-caption">Волоконно-оптические кабели для лазерной передачи данных</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://storage.imgbly.com/imgbly/KXqrINZgBN.jpeg" alt="Лазер в науке">
+                        <div class="image-caption">Использование лазеров в научных исследованиях</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="https://storage.imgbly.com/imgbly/CetWts0ycm.jpeg" alt="Лазер в военной технике">
+                        <div class="image-caption">Лазерные технологии в военной сфере</div>
+                    </div>
+                </div>
+                
+                <p style="margin-top: 20px; font-style: italic; text-align: center;">Фотографии демонстрируют разнообразие применений лазерных технологий в современном мире.</p>
+            </section>
+            
+            <section id="conclusion" class="fade-in">
+                <h2>Выводы и перспективы</h2>
+                <p>В ходе работы над проектом были изучены основные принципы работы лазеров, их типы и характеристики, а также разнообразные области применения лазерных технологий.</p>
+                
+                <div class="content-block">
+                    <h3>Основные выводы исследования:</h3>
+                    <ul>
+                        <li>Лазерные технологии являются важным инструментом в современной науке, технике и медицине, оказывающим влияние на развитие многих отраслей</li>
+                        <li>Широкий спектр применения лазеров обусловлен уникальными свойствами лазерного излучения: когерентностью, монохроматичностью, направленностью и возможностью достижения высокой плотности мощности</li>
+                        <li>Лазерные технологии продолжают развиваться, открывая новые возможности для различных отраслей, включая медицину, производство, связь и научные исследования</li>
+                        <li>Понимание принципов работы лазеров важно для специалистов в различных технических областях, так как лазеры стали неотъемлемой частью современной технологии</li>
+                        <li>Перспективы развития лазерных технологий связаны с увеличением мощности и эффективности лазеров, расширением спектрального диапазона, миниатюризацией и снижением стоимости лазерных систем</li>
+                    </ul>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Практическая значимость проекта</h3>
+                    <p>Данный проект имеет практическую значимость, так как позволяет систематизировать знания о лазерных технологиях и их применениях. Созданный веб-сайт может использоваться в качестве учебного пособия для студентов, изучающих лазерные технологии и смежные дисциплины.</p>
+                    
+                    <div class="quote">
+                        <p>"Лазерные технологии стали одним из ключевых факторов технологического прогресса XXI века, сравнимых по значимости с развитием полупроводниковой электроники и цифровых технологий."</p>
+                    </div>
+                    
+                    <p>Проект позволил углубить знания в области лазерных технологий и оценить их значение для современного технологического развития. Полученные в ходе исследования знания и навыки будут полезны в дальнейшей учебной и профессиональной деятельности.</p>
+                </div>
+                
+                <div class="content-block">
+                    <h3>Рекомендации для дальнейшего исследования</h3>
+                    <p>Для более глубокого изучения темы рекомендуется:</p>
+                    <ol>
+                        <li>Изучить конкретные технические характеристики современных лазерных систем</li>
+                        <li>Провести сравнительный анализ эффективности лазерных технологий в различных отраслях</li>
+                        <li>Исследовать экономические аспекты внедрения лазерных технологий на предприятиях</li>
+                        <li>Проанализировать влияние лазерных технологий на экологию и безопасность</li>
+                        <li>Изучить перспективные направления развития лазерных технологий, такие как квантовые вычисления и лазерный термоядерный синтез</li>
+                    </ol>
+                </div>
+            </section>
         </div>
-
-        <!-- Карточки с информацией -->
-        <div class="cards-container" id="cards-container">
-            <!-- Карточки будут генерироваться JavaScript -->
+        
+        <div class="theme-sidebar">
+            <div class="theme-menu">
+                <h3>Навигация по темам</h3>
+                <ul class="theme-list">
+                    <li><a href="#about" class="active">О проекте</a></li>
+                    <li><a href="#laser-tech">Лазерные технологии</a></li>
+                    <li><a href="#history">История развития</a></li>
+                    <li><a href="#applications">Применение лазеров</a></li>
+                    <li><a href="#classification">Классификация проекта</a></li>
+                    <li><a href="#gallery">Галерея</a></li>
+                    <li><a href="#conclusion">Выводы и перспективы</a></li>
+                </ul>
+            </div>
+            
+            <div class="quick-facts">
+                <h3>Интересные факты</h3>
+                <div class="fact-item">
+                    <div class="fact-icon">⚡</div>
+                    <div class="fact-text">
+                        <strong>Первый лазер</strong>
+                        <p>Создан в 1960 году Теодором Майманом</p>
+                    </div>
+                </div>
+                <div class="fact-item">
+                    <div class="fact-icon">🔬</div>
+                    <div class="fact-text">
+                        <strong>Принцип работы</strong>
+                        <p>Основан на вынужденном излучении атомов</p>
+                    </div>
+                </div>
+                <div class="fact-item">
+                    <div class="fact-icon">🏥</div>
+                    <div class="fact-text">
+                        <strong>Медицина</strong>
+                        <p>Лазеры используются в 50+ медицинских процедурах</p>
+                    </div>
+                </div>
+                <div class="fact-item">
+                    <div class="fact-icon">📡</div>
+                    <div class="fact-text">
+                        <strong>Связь</strong>
+                        <p>Оптоволоконные сети передают данные с помощью лазеров</p>
+                    </div>
+                </div>
+                <div class="fact-item">
+                    <div class="fact-icon">🏭</div>
+                    <div class="fact-text">
+                        <strong>Промышленность</strong>
+                        <p>Лазерная резка увеличивает точность на 30%</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    
+    <footer>
+        <div class="footer-content">
+            <p><strong>Проект выполнил: Кондрашов Владислав Сергеевич</strong></p>
+            <p>Студент 1 курса группы 1-БАС-9-13 Колледжа №54</p>
+            
+            <div class="footer-links">
+                <a href="#about">О проекте</a>
+                <a href="#laser-tech">Лазерные технологии</a>
+                <a href="#applications">Применение</a>
+                <a href="#classification">Классификация</a>
+                <a href="#conclusion">Выводы</a>
+            </div>
+            
+            <p class="copyright">© 2023 Все права защищены. Данный сайт является учебным проектом.</p>
+        </div>
+    </footer>
+    
     <script>
-        // Данные для карточек (остаются теми же)
-        const data = {
-            artem: {
-                title: "Караваев Артем Иванович",
-                role: "Несовершеннолетний",
-                icon: "fas fa-male",
-                photo: "https://sun1-97.userapi.com/impg/_nb2NhfE_jv_qxgCOx2FOjBdyXDTRZoApoB7ow/mLrG7mi-98Y.jpg?quality=96&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360&sign=027f3a6ab46c06112aaff21998198fb8&u=Gsgve_JGBJIKsdpKeqSEdgzA8QnKETeW3ILhU4seZNI&cs=200x200",
-                cards: [
-                    {
-                        title: "Личные данные",
-                        icon: "fas fa-id-card",
-                        content: [
-                            { label: "Дата рождения", value: "27.04.2009 (16 лет)" },
-                            { label: "Место рождения", value: "г. Москва, Россия" },
-                            { label: "Возрастная группа", value: "Подросток" },
-                            { label: "Социальный статус", value: "<span class='highlight'>Инвалид, иждивенец</span>" }
-                        ]
-                    },
-                    {
-                        title: "Контакты",
-                        icon: "fas fa-address-book",
-                        content: [
-                            { label: "Мобильный телефон", value: "+7 (916) 745-22-79" },
-                            { label: "Электронная почта", value: "Artem.karavaev2009@mail.ru" },
-                            { label: "Telegram", value: "@potato463 [ID: 1744997076]" },
-                            { label: "ВКонтакте", value: "https://vk.com/id589337367" }
-                        ]
-                    },
-                    {
-                        title: "Документы",
-                        icon: "fas fa-file-alt",
-                        content: [
-                            { label: "Свидетельство о рождении", value: "IV-МЮ № 668127" },
-                            { label: "Дата выдачи", value: "13.05.2009" },
-                            { label: "Кем выдано", value: "Рязанский отдел ЗАГС Управления ЗАГС Москвы" },
-                            { label: "СНИЛС", value: "179-523-984 25" },
-                            { label: "ИНН", value: "7777 440900 36" },
-                            { label: "Полис ОМС", value: "7700 0010 1077 4409" }
-                        ]
-                    },
-                    {
-                        title: "Адресная информация",
-                        icon: "fas fa-home",
-                        content: [
-                            { label: "Фактический адрес", value: "г. Москва, Тарханская улица, д. 3, корп. 2, кв. 256" },
-                            { label: "Район", value: "ЮВАО, Выхино-Жулебино" },
-                            { label: "Дата регистрации", value: "19.05.2009" },
-                            { label: "Зарегистрированные лица", value: "4 человека" }
-                        ]
-                    }
-                ]
-            },
-            mother: {
-                title: "Петрова Яна Анатольевна",
-                role: "Мать",
-                icon: "fas fa-female",
-                photo: "https://via.placeholder.com/200x200/8b0000/ffffff?text=Я.А.Петрова",
-                cards: [
-                    {
-                        title: "Личные данные",
-                        icon: "fas fa-id-card",
-                        content: [
-                            { label: "Дата рождения", value: "13.09.1985 (39 лет)" },
-                            { label: "Место рождения", value: "г. Москва" },
-                            { label: "Возрастная группа", value: "Взрослый" }
-                        ]
-                    },
-                    {
-                        title: "Контакты",
-                        icon: "fas fa-address-book",
-                        content: [
-                            { label: "Мобильный телефон", value: "+7 (926) 558-29-45" },
-                            { label: "Дополнительный телефон", value: "+7 (495) 704-14-76" },
-                            { label: "Электронная почта", value: "Anikanova.yana2012@yandex.ru" }
-                        ]
-                    },
-                    {
-                        title: "Документы - Паспорт",
-                        icon: "fas fa-passport",
-                        content: [
-                            { label: "Серия и номер", value: "45 18 916547" },
-                            { label: "Дата выдачи", value: "26.10.2018" },
-                            { label: "Кем выдан", value: "ГУ МВД России по г. Москве" },
-                            { label: "Код подразделения", value: "770-098" }
-                        ]
-                    },
-                    {
-                        title: "Документы - Прочие",
-                        icon: "fas fa-files",
-                        content: [
-                            { label: "СНИЛС", value: "094-712-122 63" },
-                            { label: "ИНН", value: "7721 534609 19<br>7713 148500 17 (доп.)" },
-                            { label: "Полис ОМС", value: "7750 4108 8600 2151" }
-                        ]
-                    },
-                    {
-                        title: "Водительское удостоверение",
-                        icon: "fas fa-id-card-alt",
-                        content: [
-                            { label: "Номер", value: "99 04 645128" },
-                            { label: "Дата выдачи", value: "20.11.2018" },
-                            { label: "Дата окончания", value: "14.06.2028" },
-                            { label: "Категории", value: "B, B1, M" },
-                            { label: "Причина замены", value: "Замена в связи со сменой фамилии" }
-                        ]
-                    },
-                    {
-                        title: "Трудовая деятельность",
-                        icon: "fas fa-briefcase",
-                        content: [
-                            { label: "Работодатель", value: "ООО 'МН Московский Регион'" },
-                            { label: "ИНН работодателя", value: "7709 965523" },
-                            { label: "Период работы", value: "с 26.10.2018 по 20.12.2022" },
-                            { label: "Статус занятости", value: "<span class='highlight'>Не работает с декабря 2022</span>" }
-                        ]
-                    }
-                ]
-            },
-            grandmother: {
-                title: "Черкасова Марина Анатольевна",
-                role: "Бабушка",
-                icon: "fas fa-user-alt",
-                photo: "https://via.placeholder.com/200x200/5a0000/ffffff?text=М.А.Черкасова",
-                cards: [
-                    {
-                        title: "Личные данные",
-                        icon: "fas fa-id-card",
-                        content: [
-                            { label: "Дата рождения", value: "16.05.1961 (64 года)" },
-                            { label: "Возрастная группа", value: "Пенсионер" }
-                        ]
-                    },
-                    {
-                        title: "Контакты",
-                        icon: "fas fa-address-book",
-                        content: [
-                            { label: "Мобильный телефон", value: "+7 (915) 461-10-39" }
-                        ]
-                    },
-                    {
-                        title: "Предполагаемая информация",
-                        icon: "fas fa-home",
-                        content: [
-                            { label: "Место проживания", value: "г. Москва, ул. Тарханская, д. 3, корп. 2, кв. 256" },
-                            { label: "Статус", value: "Фактический опекун внука" },
-                            { label: "Родственная связь", value: "Мать Петровой (Черкасовой) Я.А." }
-                        ]
-                    }
-                ]
-            },
-            violations: {
-                title: "Нарушения законодательства РФ",
-                role: "Караваев Артем Иванович",
-                icon: "fas fa-gavel",
-                cards: [
-                    {
-                        title: "Общая информация о нарушениях",
-                        icon: "fas fa-exclamation-triangle",
-                        warning: true,
-                        content: [
-                            { label: "Статус дел", value: "<span class='status-active'>АКТИВНЫЕ РАССЛЕДОВАНИЯ</span>" },
-                            { label: "Уровень опасности", value: "<span class='severity-high'>ВЫСОКИЙ</span>" },
-                            { label: "Количество эпизодов", value: "12 подтвержденных нарушений" },
-                            { label: "Период активности", value: "2023-2025 гг." }
-                        ]
-                    },
-                    {
-                        title: "Пропаганда нетрадиционных отношений",
-                        icon: "fas fa-ban",
-                        warning: true,
-                        content: [
-                            { label: "Статья УК РФ", value: "6.21 КоАП РФ (пропаганда)" },
-                            { label: "Статус дела", value: "<span class='status-active'>В производстве</span>" },
-                            { label: "Подразделение", value: "УМВД по ЮВАО" },
-                            { label: "Следователь", value: "Иванов П.С." }
-                        ]
-                    },
-                    {
-                        title: "Жестокое обращение с животными",
-                        icon: "fas fa-paw",
-                        warning: true,
-                        content: [
-                            { label: "Статья УК РФ", value: "ст. 245 УК РФ" },
-                            { label: "Статус дела", value: "<span class='status-active'>Сбор доказательств</span>" },
-                            { label: "Подразделение", value: "УМВД по ЮВАО" },
-                            { label: "Количество эпизодов", value: "5 подтвержденных случаев" }
-                        ]
-                    },
-                    {
-                        title: "Доказательная база",
-                        icon: "fas fa-clipboard-check",
-                        warning: true,
-                        content: [
-                            { label: "Видеоматериалы", value: "8 файлов, 3.4 ГБ" },
-                            { label: "Фотодоказательства", value: "47 снимков" },
-                            { label: "Электронная переписка", value: "скриншоты Telegram" },
-                            { label: "Свидетельские показания", value: "3 человека" }
-                        ]
-                    }
-                ]
-            },
-            connections: {
-                title: "Ключевые наблюдения и связи",
-                role: "Анализ данных",
-                icon: "fas fa-link",
-                cards: [
-                    {
-                        title: "Расхождение адресов",
-                        icon: "fas fa-map-marker-alt",
-                        content: [
-                            { label: "Факт", value: "Мать (Петрова Я.А.) зарегистрирована по тому же адресу, что и сын (ул. Тарханская), но фактически проживает в Реутове." },
-                            { label: "Следствие", value: "Несовершеннолетний Артем проживает с бабушкой." }
-                        ]
-                    },
-                    {
-                        title: "Смена фамилии",
-                        icon: "fas fa-user-edit",
-                        content: [
-                            { label: "Факт", value: "У матери есть отметка о замене водительского удостоверения в связи со сменой фамилии." },
-                            { label: "Предположение", value: "Смена фамилии с Черкасовой на Петрову." }
-                        ]
-                    },
-                    {
-                        title: "Родственная связь",
-                        icon: "fas fa-users",
-                        content: [
-                            { label: "Факт", value: "Черкасова М.А. (бабушка) и Петрова (Черкасова?) Я.А. (мать) имеют одинаковое отчество (Анатольевна)." },
-                            { label: "Вывод", value: "Прямое родство подтверждено." }
-                        ]
-                    },
-                    {
-                        title: "Социальный статус",
-                        icon: "fas fa-heartbeat",
-                        content: [
-                            { label: "Факт", value: "Несовершеннолетний Артем является инвалидом и иждивенцем." },
-                            { label: "Следствие", value: "Проживает в Москве с бабушкой, в то время как мать живет отдельно в Подмосковье и не работает с декабря 2022 года." }
-                        ]
-                    }
-                ]
-            },
-            additional: {
-                title: "Дополнительная информация",
-                role: "Важные данные из источников",
-                icon: "fas fa-info-circle",
-                cards: [
-                    {
-                        title: "Ключевые данные Петровой Я.А.",
-                        icon: "fas fa-female",
-                        content: [
-                            { label: "Образование", value: "Высшее, Московский городской педагогический университет (2008)" },
-                            { label: "Профессия", value: "Учитель Технология и предпринимательство" },
-                            { label: "Желаемая должность", value: "Директор по персоналу" },
-                            { label: "Ожидаемая зарплата", value: "150 000 руб." }
-                        ]
-                    },
-                    {
-                        title: "Социальные сети и контакты",
-                        icon: "fas fa-share-alt",
-                        content: [
-                            { label: "ВКонтакте", value: "Артём Потато (id589337367)" },
-                            { label: "Telegram", value: "@potato463 (Артём Потато🥛)" },
-                            { label: "Youla", value: "Belij Leha" },
-                            { label: "Trudvsem.ru", value: "Активный поиск работы" }
-                        ]
-                    },
-                    {
-                        title: "Финансовая информация",
-                        icon: "fas fa-credit-card",
-                        content: [
-                            { label: "Банковские услуги", value: "Озон Счёт (Еком Банк)" },
-                            { label: "Недвижимость", value: "Квартира 58.2 кв.м (Тарханская ул.)" },
-                            { label: "Кадастровый номер", value: "77:04:0005009:5717" },
-                            { label: "Стоимость недвижимости", value: "~8-10 млн руб." }
-                        ]
-                    },
-                    {
-                        title: "Медицинская информация",
-                        icon: "fas fa-hospital",
-                        content: [
-                            { label: "Медицинские учреждения", value: "Полимедика, Гемотест" },
-                            { label: "Страховая компания", value: "СОГАЗ-МЕД" },
-                            { label: "Номер полиса ОМС", value: "7750410886002151" }
-                        ]
-                    }
-                ]
-            }
-        };
-
-        // Инициализация страницы
+        // Добавляем активный класс к текущему разделу в боковом меню
         document.addEventListener('DOMContentLoaded', function() {
-            const cardsContainer = document.getElementById('cards-container');
-            const navButtons = document.querySelectorAll('.nav-btn');
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.theme-list a');
             
-            let currentPerson = 'artem';
-            
-            // Функция отображения карточек
-            function displayCards(person) {
-                cardsContainer.innerHTML = '';
-                const personData = data[person];
+            window.addEventListener('scroll', function() {
+                let current = '';
                 
-                if (!personData) return;
-                
-                // Добавляем фотографию профиля
-                if (personData.photo) {
-                    const photoCard = document.createElement('div');
-                    photoCard.className = 'card';
-                    photoCard.style.animationDelay = '0s';
-                    
-                    photoCard.innerHTML = `
-                        <div class="card-header">
-                            <div class="card-icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="card-title">Фотография профиля</div>
-                        </div>
-                        <div class="card-body" style="text-align: center;">
-                            <img src="${personData.photo}" alt="${personData.title}" class="person-photo">
-                            <div class="info-row">
-                                <div class="info-label">Идентификация</div>
-                                <div class="info-value">Подтверждено: ${personData.title}</div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    cardsContainer.appendChild(photoCard);
-                }
-                
-                personData.cards.forEach((card, index) => {
-                    const cardElement = document.createElement('div');
-                    cardElement.className = 'card';
-                    if (card.warning) cardElement.classList.add('warning');
-                    cardElement.style.animationDelay = `${(index + 1) * 0.1}s`;
-                    
-                    const cardHeaderClass = card.warning ? 'card-header warning' : 'card-header';
-                    
-                    cardElement.innerHTML = `
-                        <div class="${cardHeaderClass}">
-                            <div class="card-icon">
-                                <i class="${card.icon}"></i>
-                            </div>
-                            <div class="card-title">${card.title}</div>
-                        </div>
-                        <div class="card-body">
-                            ${card.content.map(item => {
-                                const rowClass = card.warning ? 'info-row warning' : 'info-row';
-                                return `
-                                <div class="${rowClass}">
-                                    <div class="info-label">${item.label}</div>
-                                    <div class="info-value">${item.value}</div>
-                                </div>
-                                `;
-                            }).join('')}
-                            ${person === 'violations' && card.title === 'Пропаганда нетрадиционных отношений' ? `
-                                <div class="law-article warning">
-                                    <h4>Статья 6.21 КоАП РФ</h4>
-                                    <p>Пропаганда нетрадиционных сексуальных отношений среди несовершеннолетних, выражающаяся в распространении информации, направленной на формирование у несовершеннолетних нетрадиционных сексуальных установок.</p>
-                                </div>
-                                <h4>Доказательства:</h4>
-                                <ul class="evidence-list">
-                                    <li>Видео в TikTok с демонстрацией фембой-атрибутики (3 ролика)</li>
-                                    <li>Публикации в Telegram-канале с 2,4 тыс. подписчиков</li>
-                                    <li>Распространение материалов среди одноклассников</li>
-                                </ul>
-                            ` : ''}
-                            ${person === 'violations' && card.title === 'Жестокое обращение с животными' ? `
-                                <div class="law-article warning">
-                                    <h4>Статья 245 УК РФ</h4>
-                                    <p>Жестокое обращение с животными в целях причинения им боли и (или) страданий, а равно из хулиганских побуждений, повлекшее их гибель или увечье.</p>
-                                </div>
-                                <h4>Доказательства:</h4>
-                                <ul class="evidence-list">
-                                    <li>Видео с издевательствами над бездомными кошками (2 эпизода)</li>
-                                    <li>Фотографии с признаками насилия над животными</li>
-                                    <li>Показания соседей о жестоком обращении с домашним котом</li>
-                                    <li>Медицинское заключение ветеринара о травмах животного</li>
-                                </ul>
-                            ` : ''}
-                            ${person === 'additional' ? `
-                                <div class="additional-info">
-                                    <h4>Источник данных:</h4>
-                                    <p>Информация собрана из открытых источников: Росреестр, ФНС, ФОМС, МВД, социальные сети и базы данных за 2018-2025 гг.</p>
-                                </div>
-                            ` : ''}
-                        </div>
-                    `;
-                    
-                    cardsContainer.appendChild(cardElement);
-                });
-                
-                // Обновляем активную кнопку
-                navButtons.forEach(btn => {
-                    if (btn.dataset.target === person) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= (sectionTop - 200)) {
+                        current = section.getAttribute('id');
                     }
                 });
-            }
-            
-            // Инициализация отображения карточек
-            displayCards(currentPerson);
-            
-            // Обработчики для кнопок навигации
-            navButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    currentPerson = this.dataset.target;
-                    displayCards(currentPerson);
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').substring(1) === current) {
+                        link.classList.add('active');
+                    }
                 });
             });
+            
+            // Анимация появления элементов при скролле
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Проверяем при загрузке
+            fadeInOnScroll();
+            
+            // И при скролле
+            window.addEventListener('scroll', fadeInOnScroll);
         });
     </script>
 </body>
