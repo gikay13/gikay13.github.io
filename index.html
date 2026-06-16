@@ -23,7 +23,7 @@
             position: fixed;
             top: -5%;
             left: -5%;
-            width: 110%; /* Делаем больше экрана, чтобы было место для сдвига */
+            width: 110%; /* Делаем чуть больше экрана, чтобы было место для сдвига */
             height: 110%;
             z-index: -3;
         }
@@ -32,9 +32,9 @@
         #bg-image {
             width: 100%;
             height: 100%;
-            background-image: url('IMG_2640.jpeg');
+            background-image: url('IMG_2643.jpeg'); /* Обновленное название вашей картинки */
             background-size: cover;
-            background-position: center;
+            background-position: center; /* Центрирование картинки */
             background-repeat: no-repeat;
             opacity: 0;
             filter: blur(10px);
@@ -150,7 +150,7 @@
     <!-- Контент -->
     <main class="relative z-10 w-full h-full flex flex-col md:flex-row justify-between items-center p-6 pb-12 md:p-20 lg:p-32 box-border pointer-events-none">
         
-        <!-- ТЕКСТ -->
+        <!-- ТЕКСТ (Справа на ПК, Сверху на мобильных) -->
         <div class="w-full md:w-1/3 order-1 md:order-3 flex justify-center md:justify-end text-center md:text-right mt-4 md:mt-0 animate-text pointer-events-auto">
             <div class="max-w-md">
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter mb-4 md:mb-6 neon-text leading-none">
@@ -165,9 +165,10 @@
             </div>
         </div>
 
+        <!-- Центральная пустота для картинки -->
         <div class="order-2 md:order-2 flex-grow w-full md:w-1/3 min-h-[35vh] md:min-h-0"></div>
 
-        <!-- КНОПКА СКАЧИВАНИЯ ВАШЕЙ ПРЕЗЕНТАЦИИ -->
+        <!-- КНОПКА СКАЧИВАНИЯ (Слева на ПК, Снизу на мобильных) -->
         <div class="w-full md:w-1/3 order-3 md:order-1 flex justify-center md:justify-start mb-4 md:mb-0 animate-btn pointer-events-auto">
             <a id="download-btn" href="Буравцов.pdf" download="Буравцов.pdf" class="neon-button px-8 py-4 sm:px-10 sm:py-5 rounded-full text-sm md:text-base font-bold flex items-center gap-3 group cursor-pointer w-full sm:w-auto justify-center uppercase tracking-widest text-white decoration-none">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-1">
@@ -197,8 +198,8 @@
         // Для телефонов (гироскоп/наклон)
         window.addEventListener('deviceorientation', (e) => {
             // Ограничиваем углы, чтобы картинка не улетала далеко
-            const beta = Math.min(Math.max(e.beta, -30), 30); // Наклон вперед-назад
-            const gamma = Math.min(Math.max(e.gamma, -30), 30); // Наклон влево-вправо
+            const beta = Math.min(Math.max(e.beta || 0, -30), 30); // Наклон вперед-назад
+            const gamma = Math.min(Math.max(e.gamma || 0, -30), 30); // Наклон влево-вправо
             
             const xAxis = gamma * 1.5; 
             const yAxis = (beta - 30) * 1.5; // Смещение центра тяжести
