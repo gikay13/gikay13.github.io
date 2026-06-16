@@ -15,62 +15,18 @@
             background-color: #030303;
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            overflow: hidden; /* Важно для параллакса */
+            overflow: hidden;
         }
 
-        /* Контейнер для параллакс-фона */
-        #parallax-container {
-            position: fixed;
-            top: -5%;
-            left: -5%;
-            width: 110%; /* Делаем чуть больше экрана, чтобы было место для сдвига */
-            height: 110%;
-            z-index: -3;
-        }
-
-        /* Сам фон (Ваша фотография) */
-        #bg-image {
-            width: 100%;
-            height: 100%;
-            background-image: url('IMG_2643.jpeg'); /* Обновленное название вашей картинки */
-            background-size: cover;
-            background-position: center; /* Центрирование картинки */
-            background-repeat: no-repeat;
-            opacity: 0;
-            filter: blur(10px);
-            transition: transform 0.1s ease-out; /* Плавность следования за мышью */
-            animation: bgAppear 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            will-change: transform;
-        }
-
-        /* Виньетки для читаемости текста */
+        /* Виньетки для читаемости текста и создания атмосферы */
         .bg-overlay {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, transparent 15%, rgba(3,3,3,0.85) 100%);
+            background: radial-gradient(circle at center, transparent 30%, rgba(3,3,3,0.95) 100%);
             z-index: -2;
             pointer-events: none;
         }
         
-        @media (min-width: 768px) {
-            .bg-overlay-linear {
-                position: fixed;
-                inset: 0;
-                background: linear-gradient(90deg, rgba(3,3,3,0.95) 0%, rgba(3,3,3,0) 30%, rgba(3,3,3,0) 70%, rgba(3,3,3,0.95) 100%);
-                z-index: -1;
-                pointer-events: none;
-            }
-        }
-        @media (max-width: 767px) {
-            .bg-overlay-linear {
-                position: fixed;
-                inset: 0;
-                background: linear-gradient(180deg, rgba(3,3,3,0.95) 0%, rgba(3,3,3,0) 25%, rgba(3,3,3,0) 65%, rgba(3,3,3,0.95) 100%);
-                z-index: -1;
-                pointer-events: none;
-            }
-        }
-
         /* Снег */
         #snow-canvas {
             position: fixed;
@@ -88,8 +44,8 @@
         }
 
         .neon-button {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 0 15px rgba(255,255,255,0.1), inset 0 0 10px rgba(255,255,255,0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -99,14 +55,11 @@
         .neon-button:hover {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.5);
+            box-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.6);
             border-color: #ffffff;
         }
 
         /* Анимации появления */
-        @keyframes bgAppear {
-            100% { opacity: 1; filter: blur(0); }
-        }
         @keyframes slideInRight {
             0% { opacity: 0; transform: translateX(50px); }
             100% { opacity: 1; transform: translateX(0); }
@@ -115,9 +68,44 @@
             0% { opacity: 0; transform: translateX(-50px); }
             100% { opacity: 1; transform: translateX(0); }
         }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); filter: blur(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+        }
 
         .animate-text { opacity: 0; animation: slideInRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s; }
         .animate-btn { opacity: 0; animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.8s; }
+        .animate-minion { opacity: 0; animation: popIn 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s; }
+
+        /* Стили для 3D-Миньона */
+        .minion-container {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            position: relative;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)); /* Глобальная тень */
+        }
+        
+        /* Задняя неоновая подсветка, чтобы он выделялся на черном фоне */
+        .minion-backlight {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.15);
+            filter: blur(50px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
 
         /* Уведомление */
         #toast {
@@ -137,20 +125,13 @@
     </style>
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
-
-    <!-- 3D Параллакс Фон -->
-    <div id="parallax-container">
-        <div id="bg-image"></div>
-    </div>
     
     <div class="bg-overlay"></div>
-    <div class="bg-overlay-linear"></div>
     <canvas id="snow-canvas"></canvas>
 
-    <!-- Контент -->
     <main class="relative z-10 w-full h-full flex flex-col md:flex-row justify-between items-center p-6 pb-12 md:p-20 lg:p-32 box-border pointer-events-none">
         
-        <!-- ТЕКСТ (Справа на ПК, Сверху на мобильных) -->
+        <!-- ТЕКСТ -->
         <div class="w-full md:w-1/3 order-1 md:order-3 flex justify-center md:justify-end text-center md:text-right mt-4 md:mt-0 animate-text pointer-events-auto">
             <div class="max-w-md">
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter mb-4 md:mb-6 neon-text leading-none">
@@ -165,13 +146,157 @@
             </div>
         </div>
 
-        <!-- Центральная пустота для картинки -->
-        <div class="order-2 md:order-2 flex-grow w-full md:w-1/3 min-h-[35vh] md:min-h-0"></div>
+        <!-- 3D МИНЬОН (SVG) -->
+        <div class="order-2 md:order-2 flex-grow w-full md:w-1/3 min-h-[40vh] md:min-h-0 flex justify-center items-center animate-minion pointer-events-none relative">
+            
+            <div class="minion-container">
+                <div class="minion-backlight"></div>
+                <!-- SVG с продвинутыми тенями и градиентами -->
+                <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+                    <defs>
+                        <!-- Неоновое свечение -->
+                        <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur1" />
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur2" />
+                            <feMerge>
+                                <feMergeNode in="blur2" />
+                                <feMergeNode in="blur1" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                        
+                        <!-- Тень (Ambient Occlusion) -->
+                        <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.7"/>
+                        </filter>
 
-        <!-- КНОПКА СКАЧИВАНИЯ (Слева на ПК, Снизу на мобильных) -->
+                        <!-- Градиент тела (Глянцевый темный пластик) -->
+                        <radialGradient id="bodyGrad" cx="35%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#4a4a4a" />
+                            <stop offset="40%" stop-color="#1a1a1a" />
+                            <stop offset="80%" stop-color="#050505" />
+                            <stop offset="100%" stop-color="#000000" />
+                        </radialGradient>
+
+                        <!-- Градиент комбинезона -->
+                        <radialGradient id="pantsGrad" cx="50%" cy="20%" r="80%">
+                            <stop offset="0%" stop-color="#2a2a2a" />
+                            <stop offset="70%" stop-color="#0a0a0a" />
+                            <stop offset="100%" stop-color="#000000" />
+                        </radialGradient>
+
+                        <!-- Металлический градиент очков -->
+                        <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="20%" stop-color="#888888" />
+                            <stop offset="50%" stop-color="#333333" />
+                            <stop offset="80%" stop-color="#aaaaaa" />
+                            <stop offset="100%" stop-color="#ffffff" />
+                        </linearGradient>
+
+                        <!-- Градиент стекла (линза) -->
+                        <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="rgba(255,255,255,0.4)" />
+                            <stop offset="40%" stop-color="rgba(255,255,255,0.0)" />
+                            <stop offset="60%" stop-color="rgba(255,255,255,0.0)" />
+                            <stop offset="100%" stop-color="rgba(255,255,255,0.1)" />
+                        </linearGradient>
+
+                        <!-- Градиент рук и ног (цилиндрический) -->
+                        <linearGradient id="limbGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#000" />
+                            <stop offset="30%" stop-color="#444" />
+                            <stop offset="70%" stop-color="#111" />
+                            <stop offset="100%" stop-color="#000" />
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Задняя рука -->
+                    <path d="M 90 200 Q 30 220 50 280" fill="none" stroke="url(#limbGrad)" stroke-width="16" stroke-linecap="round"/>
+                    <circle cx="50" cy="285" r="16" fill="#111" filter="url(#dropShadow)"/>
+                    <circle cx="45" cy="280" r="5" fill="#fff" opacity="0.3" filter="blur(2px)"/> <!-- Блик перчатки -->
+
+                    <!-- Ноги -->
+                    <rect x="110" y="290" width="16" height="40" fill="url(#limbGrad)" rx="8" />
+                    <rect x="174" y="290" width="16" height="40" fill="url(#limbGrad)" rx="8" />
+                    
+                    <!-- Ботинки -->
+                    <path d="M 100 340 Q 118 315 136 340 Z" fill="#0a0a0a" filter="url(#dropShadow)"/>
+                    <path d="M 164 340 Q 182 315 200 340 Z" fill="#0a0a0a" filter="url(#dropShadow)"/>
+                    <!-- Блики ботинок -->
+                    <ellipse cx="110" cy="330" rx="6" ry="3" fill="#fff" opacity="0.2" transform="rotate(-20 110 330)" />
+                    <ellipse cx="174" cy="330" rx="6" ry="3" fill="#fff" opacity="0.2" transform="rotate(-20 174 330)" />
+
+                    <!-- ТЕЛО (Основа) -->
+                    <!-- Тень под телом -->
+                    <rect x="75" y="60" width="150" height="240" rx="75" fill="#000" opacity="0.5" filter="blur(10px)"/>
+                    <!-- Само тело -->
+                    <rect x="75" y="60" width="150" height="240" rx="75" fill="url(#bodyGrad)"/>
+                    <!-- Rim light (белый контур сзади для объема) -->
+                    <rect x="76" y="61" width="148" height="238" rx="74" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+                    <!-- Сильный блик на макушке -->
+                    <ellipse cx="110" cy="80" rx="30" ry="15" fill="#fff" opacity="0.3" filter="blur(6px)" transform="rotate(-20 110 80)"/>
+
+                    <!-- КОМБИНЕЗОН -->
+                    <path d="M 75 220 A 75 75 0 0 0 225 220 L 225 250 A 75 75 0 0 1 75 250 Z" fill="url(#pantsGrad)" filter="url(#dropShadow)"/>
+                    <rect x="100" y="190" width="100" height="40" fill="url(#pantsGrad)" filter="url(#dropShadow)"/>
+                    <!-- Лямки -->
+                    <path d="M 80 195 L 105 210" stroke="#111" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M 220 195 L 195 210" stroke="#111" stroke-width="12" stroke-linecap="round"/>
+                    <circle cx="105" cy="210" r="6" fill="#444" />
+                    <circle cx="195" cy="210" r="6" fill="#444" />
+                    <!-- Карман -->
+                    <path d="M 125 215 L 175 215 L 165 240 L 135 240 Z" fill="#111" stroke="#333" stroke-width="2" />
+
+                    <!-- ПЕРЕДНЯЯ РУКА -->
+                    <path d="M 210 200 Q 270 220 250 280" fill="none" stroke="url(#limbGrad)" stroke-width="16" stroke-linecap="round" filter="url(#dropShadow)"/>
+                    <circle cx="250" cy="285" r="16" fill="#111" filter="url(#dropShadow)"/>
+                    <circle cx="245" cy="280" r="5" fill="#fff" opacity="0.3" filter="blur(2px)"/> <!-- Блик перчатки -->
+
+                    <!-- РЕМЕШОК ОЧКОВ -->
+                    <rect x="73" y="125" width="154" height="22" fill="#050505" filter="url(#dropShadow)"/>
+                    <rect x="73" y="126" width="154" height="2" fill="rgba(255,255,255,0.2)"/> <!-- Фаска ремешка -->
+
+                    <!-- ОЧКИ -->
+                    <!-- Тень от очков -->
+                    <circle cx="150" cy="136" r="46" fill="#000" opacity="0.8" filter="blur(6px)"/>
+                    <!-- Металлическая оправа -->
+                    <circle cx="150" cy="136" r="44" fill="url(#metalGrad)" />
+                    <!-- Внутренняя глубина оправы -->
+                    <circle cx="150" cy="136" r="34" fill="#000" />
+                    <!-- Стекло -->
+                    <circle cx="150" cy="136" r="34" fill="url(#glassGrad)" />
+                    <!-- Блик на стекле (изогнутый) -->
+                    <path d="M 125 116 A 30 30 0 0 1 175 116 A 34 34 0 0 0 125 116" fill="#fff" opacity="0.5" />
+
+                    <!-- ГЛАЗ (Неоновый эффект) -->
+                    <!-- Свечение вокруг глаза -->
+                    <circle cx="150" cy="136" r="14" fill="rgba(255,255,255,0.2)" filter="blur(5px)"/>
+                    <!-- Сам глаз -->
+                    <circle cx="150" cy="136" r="10" fill="#ffffff" filter="url(#neonGlow)"/>
+                    <!-- Зрачок -->
+                    <circle cx="150" cy="136" r="4" fill="#000" />
+                    
+                    <!-- Подозрительное веко (перекрывает верхнюю часть глаза) -->
+                    <path d="M 115 128 Q 150 135 185 128 L 185 102 L 115 102 Z" fill="url(#bodyGrad)" filter="url(#dropShadow)"/>
+
+                    <!-- РОТ (Ухмылка) -->
+                    <path d="M 135 195 Q 150 195 165 190" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" filter="url(#neonGlow)"/>
+                    <!-- Ямочка щеки -->
+                    <line x1="168" y1="187" x2="171" y2="192" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+
+                    <!-- ВОЛОСЫ -->
+                    <line x1="150" y1="60" x2="150" y2="40" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="140" y1="62" x2="130" y2="45" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                    <line x1="160" y1="62" x2="170" y2="45" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- КНОПКА СКАЧИВАНИЯ -->
         <div class="w-full md:w-1/3 order-3 md:order-1 flex justify-center md:justify-start mb-4 md:mb-0 animate-btn pointer-events-auto">
             <a id="download-btn" href="Буравцов.pdf" download="Буравцов.pdf" class="neon-button px-8 py-4 sm:px-10 sm:py-5 rounded-full text-sm md:text-base font-bold flex items-center gap-3 group cursor-pointer w-full sm:w-auto justify-center uppercase tracking-widest text-white decoration-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-1 drop-shadow-[0_0_5px_#fff]">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -185,29 +310,7 @@
     <div id="toast" class="text-white text-sm tracking-wide shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
 
     <script>
-        // --- 1. ЭФФЕКТ 3D ПАРАЛЛАКСА ДЛЯ ФОНА ---
-        const bgImage = document.getElementById('bg-image');
-        
-        // Для компьютеров (движение мыши)
-        window.addEventListener('mousemove', (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25; // Коэффициент сдвига
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            bgImage.style.transform = `translate(${xAxis}px, ${yAxis}px)`;
-        });
-
-        // Для телефонов (гироскоп/наклон)
-        window.addEventListener('deviceorientation', (e) => {
-            // Ограничиваем углы, чтобы картинка не улетала далеко
-            const beta = Math.min(Math.max(e.beta || 0, -30), 30); // Наклон вперед-назад
-            const gamma = Math.min(Math.max(e.gamma || 0, -30), 30); // Наклон влево-вправо
-            
-            const xAxis = gamma * 1.5; 
-            const yAxis = (beta - 30) * 1.5; // Смещение центра тяжести
-
-            bgImage.style.transform = `translate(${-xAxis}px, ${-yAxis}px)`;
-        });
-
-        // --- 2. СИСТЕМА НЕОНОВОГО СНЕГА ---
+        // --- СИСТЕМА НЕОНОВОГО СНЕГА ---
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles = [];
@@ -256,7 +359,7 @@
         window.addEventListener('resize', () => { initCanvas(); createSnowflakes(); });
         initCanvas(); createSnowflakes(); animateSnow();
 
-        // --- 3. СКАЧИВАНИЕ И УВЕДОМЛЕНИЯ ---
+        // --- СКАЧИВАНИЕ И УВЕДОМЛЕНИЯ ---
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -278,3 +381,4 @@
     </script>
 </body>
 </html>
+
