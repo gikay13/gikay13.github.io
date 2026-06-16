@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Буравцов И.Ю. — Цифровой куратор</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --card: rgba(255,255,255,0.02);
+      --violet: #7c3aed;
+      --violet-light: #a78bfa;
+      --indigo: #6366f1;
+      --text: #fafafa;
+      --text-muted: rgba(255,255,255,0.5);
+      --text-faint: rgba(255,255,255,0.3);
+      --border: rgba(255,255,255,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Animated particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .particles::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(99,102,241,0.08) 0%, transparent 50%);
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(167,139,250,0.4);
+      animation: float linear infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); opacity: var(--o); }
+      25% { transform: translate(15px, -25px); opacity: calc(var(--o) * 2); }
+      50% { transform: translate(-10px, -40px); opacity: var(--o); }
+      75% { transform: translate(20px, -15px); opacity: calc(var(--o) * 1.5); }
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 48px;
+      backdrop-filter: blur(20px);
+      background: rgba(10,10,15,0.6);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      color: rgba(255,255,255,0.9);
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--violet), var(--indigo));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .header-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .header-btn:hover {
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 140px 24px 60px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.2);
+      color: var(--violet-light);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+    .badge svg { width: 16px; height: 16px; }
+    h1 {
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    h1 .gradient {
+      background: linear-gradient(135deg, #a78bfa 0%, #6366f1 50%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 32px;
+    }
+    .badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .info-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      opacity: 0;
+      transform: scale(0.85);
+      animation: popIn 0.5s ease forwards;
+    }
+    .info-badge svg { width: 15px; height: 15px; color: var(--violet-light); }
+    .info-badge:nth-child(2) { animation-delay: 0.1s; }
+    .info-badge:nth-child(3) { animation-delay: 0.2s; }
+    @keyframes popIn {
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Download button */
+    .btn-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 40px;
+      font-size: 17px;
+      font-weight: 600;
+      border: none;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--violet), var(--indigo));
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(124,58,237,0.3);
+    }
+    .btn-main::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .btn-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(124,58,237,0.4);
+    }
+    .btn-main:hover::before { opacity: 1; }
+    .btn-main span { position: relative; z-index: 1; }
+    .btn-main svg { width: 20px; height: 20px; position: relative; z-index: 1; }
+    .btn-hint {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--text-faint);
+    }
+
+    /* File card */
+    .file-card-wrap {
+      max-width: 420px;
+      margin: 50px auto 0;
+      position: relative;
+    }
+    .file-card-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -16px;
+      border-radius: 28px;
+      background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
+      filter: blur(16px);
+      z-index: -1;
+    }
+    .file-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+    .file-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.01);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; opacity: 0.7; }
+    .dot-r { background: #ef4444; }
+    .dot-y { background: #eab308; }
+    .dot-g { background: #22c55e; }
+    .file-card-header span { margin-left: 12px; font-size: 12px; color: var(--text-faint); }
+    .file-card-body {
+      padding: 40px 32px;
+      text-align: center;
+    }
+    .file-icon {
+      width: 96px; height: 96px;
+      margin: 0 auto 24px;
+      color: rgba(167,139,250,0.7);
+      animation: gentleSway 4s ease-in-out infinite;
+    }
+    @keyframes gentleSway {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-3deg); }
+      75% { transform: rotate(3deg); }
+    }
+    .file-card-body h3 { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+    .file-card-body p { font-size: 14px; color: var(--text-faint); margin-bottom: 20px; line-height: 1.5; }
+    .file-meta {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      font-size: 12px;
+      color: var(--text-faint);
+    }
+    .file-meta span { display: flex; align-items: center; gap: 5px; }
+    .file-meta svg { width: 14px; height: 14px; }
+
+    /* Content section */
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      header { padding: 16px 20px; }
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(10px);
+    }
+    .card h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card h2 svg { width: 24px; height: 24px; color: var(--violet-light); }
+
+    .task-list { display: flex; flex-direction: column; gap: 14px; }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateX(-15px);
+      animation: slideIn 0.4s ease forwards;
+    }
+    .task-item:nth-child(1) { animation-delay: 0.1s; }
+    .task-item:nth-child(2) { animation-delay: 0.2s; }
+    .task-item:nth-child(3) { animation-delay: 0.3s; }
+    .task-item:nth-child(4) { animation-delay: 0.4s; }
+    .task-item:nth-child(5) { animation-delay: 0.5s; }
+    @keyframes slideIn {
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .task-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.15);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .task-icon svg { width: 16px; height: 16px; color: var(--violet-light); }
+    .task-text { color: rgba(255,255,255,0.6); font-size: 15px; }
+    .task-divider {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .task-icon-green {
+      background: rgba(34,197,94,0.1);
+      border-color: rgba(34,197,94,0.15);
+    }
+    .task-icon-green svg { color: #4ade80; }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .info-row + .info-row { margin-top: 12px; }
+    .info-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(124,58,237,0.08);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .info-icon svg { width: 20px; height: 20px; color: var(--violet-light); }
+    .info-label { font-size: 13px; color: var(--text-faint); }
+    .info-value { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.8); margin-top: 2px; }
+    .card-desc {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-size: 15px;
+    }
+
+    /* CTA */
+    .cta {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    .cta-card {
+      position: relative;
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      padding: 56px 40px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .cta-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(124,58,237,0.15), transparent 60%);
+      opacity: 0.4;
+    }
+    .cta-card > * { position: relative; z-index: 1; }
+    .cta-card h2 { font-size: 30px; font-weight: 800; margin-bottom: 12px; }
+    .cta-card p { color: var(--text-faint); margin-bottom: 28px; line-height: 1.6; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 28px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-faint);
+      font-size: 13px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Scroll-triggered fade */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-icon">&#127891;</div>
+      <span>&#1062;&#1080;&#1092;&#1088;&#1086;&#1074;&#1086;&#1081; &#1082;&#1091;&#1088;&#1072;&#1090;&#1086;&#1088;</span>
+    </div>
+    <a href="&#1041;&#1091;&#1088;&#1072;&#1074;&#1094;&#1086;&#1074;.pdf" download class="header-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      &#1057;&#1082;&#1072;&#1095;&#1072;&#1090;&#1100;
+    </a>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="fade-in">
+      <div class="badge">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        &#1050;&#1074;&#1072;&#1083;&#1080;&#1092;&#1080;&#1082;&#1072;&#1094;&#1080;&#1086;&#1085;&#1085;&#1099;&#1081; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085; 2026
+      </div>
+
+      <h1>
+        &#1055;&#1088;&#1077;&#1079;&#1077;&#1085;&#1090;&#1072;&#1094;&#1080;&#1103; &#1087;&#1086;<br><span class="gradient">&#1094;&#1080;&#1092;&#1088;&#1086;&#1074;&#1086;&#1081; &#1075;&#1088;&#1072;&#1084;&#1086;&#1090;&#1085;&#1086;&#1089;&#1090;&#1080;</span>
+      </h1>
+
+      <p class="subtitle">
+        &#1040;&#1083;&#1075;&#1086;&#1088;&#1080;&#1090;&#1084; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1103; &#1087;&#1088;&#1072;&#1082;&#1090;&#1080;&#1095;&#1077;&#1089;&#1082;&#1086;&#1075;&#1086; &#1101;&#1090;&#1072;&#1087;&#1072; &#1082;&#1074;&#1072;&#1083;&#1080;&#1092;&#1080;&#1082;&#1072;&#1094;&#1080;&#1086;&#1085;&#1085;&#1086;&#1075;&#1086; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;&#1072; &#1087;&#1086; &#1089;&#1087;&#1077;&#1094;&#1080;&#1072;&#1083;&#1100;&#1085;&#1086;&#1089;&#1090;&#1080; &#171;&#1050;&#1086;&#1085;&#1089;&#1091;&#1083;&#1100;&#1090;&#1072;&#1085;&#1090; &#1074; &#1086;&#1073;&#1083;&#1072;&#1089;&#1090;&#1080; &#1088;&#1072;&#1079;&#1074;&#1080;&#1090;&#1080;&#1103; &#1094;&#1080;&#1092;&#1088;&#1086;&#1074;&#1086;&#1081; &#1075;&#1088;&#1072;&#1084;&#1086;&#1090;&#1085;&#1086;&#1089;&#1090;&#1080; (&#1062;&#1080;&#1092;&#1088;&#1086;&#1074;&#1086;&#1081; &#1082;&#1091;&#1088;&#1072;&#1090;&#1086;&#1088;)&#187;
+      </p>
+
+      <div class="badges-row">
+        <div class="info-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          &#1041;&#1091;&#1088;&#1072;&#1074;&#1094;&#1086;&#1074; &#1048;.&#1070;.
+        </div>
+        <div class="info-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          &#1043;&#1088;&#1091;&#1087;&#1087;&#1072; 1-&#1056;&#1052;9-9
+        </div>
+        <div class="info-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          &#1052;&#1086;&#1089;&#1082;&#1074;&#1072;, 2026
+        </div>
+      </div>
+
+      <a href="&#1041;&#1091;&#1088;&#1072;&#1074;&#1094;&#1086;&#1074;.pdf" download class="btn-main">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>&#1057;&#1082;&#1072;&#1095;&#1072;&#1090;&#1100; &#1087;&#1088;&#1077;&#1079;&#1077;&#1085;&#1090;&#1072;&#1094;&#1080;&#1102;</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:-4px"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+      <p class="btn-hint">PDF &#1092;&#1072;&#1081;&#1083;, 11 &#1089;&#1083;&#1072;&#1081;&#1076;&#1086;&#1074;</p>
+    </div>
+
+    <!-- File Card -->
+    <div class="file-card-wrap fade-in" style="animation-delay: 0.4s">
+      <div class="file-card">
+        <div class="file-card-header">
+          <div class="dot dot-r"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span>&#1041;&#1091;&#1088;&#1072;&#1074;&#1094;&#1086;&#1074;.pdf</span>
+        </div>
+        <div class="file-card-body">
+          <svg class="file-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <h3>&#1055;&#1088;&#1077;&#1079;&#1077;&#1085;&#1090;&#1072;&#1094;&#1080;&#1103;</h3>
+          <p>&#1040;&#1083;&#1075;&#1086;&#1088;&#1080;&#1090;&#1084; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1103; &#1087;&#1088;&#1072;&#1082;&#1090;&#1080;&#1095;&#1077;&#1089;&#1082;&#1086;&#1075;&#1086; &#1101;&#1090;&#1072;&#1087;&#1072; &#1082;&#1074;&#1072;&#1083;&#1080;&#1092;&#1080;&#1082;&#1072;&#1094;&#1080;&#1086;&#1085;&#1085;&#1086;&#1075;&#1086; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;&#1072;</p>
+          <div class="file-meta">
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              PDF
+            </span>
+            <span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              11 &#1089;&#1090;&#1088;&#1072;&#1085;&#1080;&#1094;
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Cards -->
+  <section class="content">
+    <div class="grid-2">
+      <div class="card reveal">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          &#1057;&#1086;&#1076;&#1077;&#1088;&#1078;&#1072;&#1085;&#1080;&#1077; &#1088;&#1072;&#1073;&#1086;&#1090;&#1099;
+        </h2>
+        <div class="task-list">
+          <div class="task-item">
+            <div class="task-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="task-text">&#1047;&#1072;&#1076;&#1072;&#1085;&#1080;&#1077; 1</span>
+          </div>
+          <div class="task-item">
+            <div class="task-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="task-text">&#1047;&#1072;&#1076;&#1072;&#1085;&#1080;&#1077; 2</span>
+          </div>
+          <div class="task-item">
+            <div class="task-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="task-text">&#1047;&#1072;&#1076;&#1072;&#1085;&#1080;&#1077; 3</span>
+          </div>
+          <div class="task-item">
+            <div class="task-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <span class="task-text">&#1047;&#1072;&#1076;&#1072;&#1085;&#1080;&#1077; 4</span>
+          </div>
+          <div class="task-divider">
+            <div class="task-item">
+              <div class="task-icon task-icon-green"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <div>
+                <div style="color:rgba(255,255,255,0.8); font-weight:500; font-size:15px;">&#1042;&#1099;&#1074;&#1086;&#1076;</div>
+                <div style="color:var(--text-faint); font-size:13px; margin-top:2px;">&#1042;&#1089;&#1077; &#1079;&#1072;&#1076;&#1072;&#1085;&#1080;&#1103; &#1087;&#1088;&#1072;&#1082;&#1090;&#1080;&#1095;&#1077;&#1089;&#1082;&#1086;&#1075;&#1086; &#1101;&#1090;&#1072;&#1087;&#1072; &#1091;&#1089;&#1087;&#1077;&#1096;&#1085;&#1086; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1099;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card reveal">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.66 4 3 9 3s9-1.34 9-3v-5"/></svg>
+          &#1054; &#1082;&#1074;&#1072;&#1083;&#1080;&#1092;&#1080;&#1082;&#1072;&#1094;&#1080;&#1080;
+        </h2>
+        <p class="card-desc">
+          &#1044;&#1072;&#1085;&#1085;&#1072;&#1103; &#1087;&#1088;&#1077;&#1079;&#1077;&#1085;&#1090;&#1072;&#1094;&#1080;&#1103; &#1087;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1083;&#1077;&#1085;&#1072; &#1074; &#1088;&#1072;&#1084;&#1082;&#1072;&#1093; &#1082;&#1074;&#1072;&#1083;&#1080;&#1092;&#1080;&#1082;&#1072;&#1094;&#1080;&#1086;&#1085;&#1085;&#1086;&#1075;&#1086; &#1101;&#1082;&#1079;&#1072;&#1084;&#1077;&#1085;&#1072; &#1087;&#1086; &#1044;&#1059;&#1055;.01 &#171;&#1055;&#1088;&#1072;&#1082;&#1090;&#1080;&#1095;&#1077;&#1089;&#1082;&#1072;&#1103; &#1087;&#1086;&#1076;&#1075;&#1086;&#1090;&#1086;&#1074;&#1082;&#1072; &#1087;&#1086; &#1090;&#1077;&#1093;&#1085;&#1086;&#1083;&#1086;&#1075;&#1080;&#1080; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1080;&#1103; &#1088;&#1072;&#1073;&#1086;&#1090; &#1087;&#1086; &#1076;&#1086;&#1083;&#1078;&#1085;&#1086;&#1089;&#1090;&#1080; &#1089;&#1083;&#1091;&#1078;&#1072;&#1097;&#1077;&#1075;&#1086; &#171;&#1050;&#1086;&#1085;&#1089;&#1091;&#1083;&#1100;&#1090;&#1072;&#1085;&#1090; &#1074; &#1086;&#1073;&#1083;&#1072;&#1089;&#1090;&#1080; &#1088;&#1072;&#1079;&#1074;&#1080;&#1090;&#1080;&#1103; &#1094;&#1080;&#1092;&#1088;&#1086;&#1074;&#1086;&#1081; &#1075;&#1088;&#1072;&#1084;&#1086;&#1090;&#1085;&#1086;&#1089;&#1090;&#1080; (&#1062;&#1080;&#1092;&#1088;&#1086;&#1074;&#1086;&#1081; &#1082;&#1091;&#1088;&#1072;&#1090;&#1086;&#1088;)&#187;.
+        </p>
+        <div class="info-row">
+          <div class="info-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div><div class="info-label">&#1057;&#1090;&#1091;&#1076;&#1077;&#1085;&#1090;</div><div class="info-value">&#1041;&#1091;&#1088;&#1072;&#1074;&#1094;&#1086;&#1074; &#1048;.&#1072;.</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+          <div><div class="info-label">&#1059;&#1095;&#1077;&#1073;&#1085;&#1072;&#1103; &#1075;&#1088;&#1091;&#1087;&#1087;&#1072;</div><div class="info-value">1-&#1056;&#1052;9-9</div></div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div><div class="info-label">&#1043;&#1086;&#1076; &#1079;&#1072;&#1097;&#1080;&#1090;&#1099;</div><div class="info-value">2026</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-card reveal">
+      <h2>&#1043;&#1086;&#1090;&#1086;&#1074;&#1099; &#1086;&#1079;&#1085;&#1072;&#1082;&#1086;&#1084;&#1080;&#1090;&#1100;&#1089;&#1103;?</h2>
+      <p>&#1057;&#1082;&#1072;&#1095;&#1072;&#1081;&#1090;&#1077; &#1087;&#1088;&#1077;&#1079;&#1077;&#1085;&#1090;&#1072;&#1094;&#1080;&#1102; &#1074; &#1092;&#1086;&#1088;&#1084;&#1072;&#1090;&#1077; PDF &#1080; &#1080;&#1079;&#1091;&#1095;&#1080;&#1090;&#1077; &#1074;&#1089;&#1077; &#1074;&#1099;&#1087;&#1086;&#1083;&#1085;&#1077;&#1085;&#1085;&#1099;&#1077; &#1079;&#1072;&#1076;&#1072;&#1085;&#1080;&#1103;</p>
+      <a href="&#1041;&#1091;&#1088;&#1072;&#1074;&#1094;&#1086;&#1074;.pdf" download class="btn-main">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>&#1057;&#1082;&#1072;&#1095;&#1072;&#1090;&#1100; PDF</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    &#1041;&#1091;&#1088;&#1072;&#1074;&#1094;&#1086;&#1074; &#1048;.&#1070;. &mdash; &#1062;&#1080;&#1092;&#1088;&#1086;&#1074;&#1086;&#1081; &#1082;&#1091;&#1088;&#1072;&#1090;&#1086;&#1088; &mdash; 2026
+  </footer>
+
+  <script>
+    // Generate particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 3 + 1;
+      p.style.cssText = `
+        width: ${size}px; height: ${size}px;
+        left: ${Math.random() * 100}%;
+        top: ${Math.random() * 100}%;
+        --o: ${Math.random() * 0.3 + 0.1};
+        animation-duration: ${Math.random() * 20 + 15}s;
+        animation-delay: ${Math.random() * 10}s;
+      `;
+      particlesContainer.appendChild(p);
+    }
+
+    // Scroll reveal
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
