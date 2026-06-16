@@ -26,7 +26,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-image: url('image.png'); /* Подключение вашей картинки */
+            background-image: url('IMG_2640.jpeg'); /* Обновленное название файла */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -273,8 +273,6 @@
         // --- 3. Логика скачивания ---
         document.getElementById('download-btn').addEventListener('click', () => {
             // Браузер сам начнет скачивание файла благодаря атрибутам href и download в теге <a>.
-            // Мы здесь только добавляем визуальный эффект кнопке и уведомление.
-            
             const btn = document.getElementById('download-btn');
             const originalContent = btn.innerHTML;
             btn.innerHTML = 'Загрузка...';
@@ -291,6 +289,5 @@
     </script>
 </body>
 </html>
-
 
 
