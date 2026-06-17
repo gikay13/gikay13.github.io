@@ -5,12 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ты не спишешь - Академическая честность</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GLTFLoader -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -20,64 +15,40 @@
             background-color: #030303;
             color: #ffffff;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            overflow: hidden;
+            overflow: hidden; /* Важно для параллакса */
         }
 
-        /* Экран загрузки с выводом логов */
-        #loading-screen {
+        /* Контейнер для параллакс-фона */
+        #parallax-container {
             position: fixed;
-            inset: 0;
-            background-color: #030303;
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease;
+            top: -5%;
+            left: -5%;
+            width: 110%; /* Делаем чуть больше экрана, чтобы было место для сдвига */
+            height: 110%;
+            z-index: -3;
         }
 
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(255,255,255,0.4);
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        #loading-text {
-            color: #fff;
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-align: center;
-            max-width: 80%;
-            opacity: 0.8;
-            font-family: monospace; /* Моноширинный шрифт для логов */
-        }
-
-        /* 3D Сцена */
-        #bg-3d {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
+        /* Сам фон (Ваша фотография) */
+        #bg-image {
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG_2643.jpeg'); /* Обновленное название вашей картинки */
+            background-size: cover;
+            background-position: center; /* Центрирование картинки */
+            background-repeat: no-repeat;
             opacity: 0;
-            transition: opacity 2s ease;
+            filter: blur(10px);
+            transition: transform 0.1s ease-out; /* Плавность следования за мышью */
+            animation: bgAppear 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: transform;
         }
 
-        /* Виньетки для атмосферы */
+        /* Виньетки для читаемости текста */
         .bg-overlay {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at center, transparent 10%, rgba(3,3,3,0.95) 100%);
-            z-index: 1;
+            background: radial-gradient(circle at center, transparent 15%, rgba(3,3,3,0.85) 100%);
+            z-index: -2;
             pointer-events: none;
         }
         
@@ -86,7 +57,7 @@
                 position: fixed;
                 inset: 0;
                 background: linear-gradient(90deg, rgba(3,3,3,0.95) 0%, rgba(3,3,3,0) 30%, rgba(3,3,3,0) 70%, rgba(3,3,3,0.95) 100%);
-                z-index: 2;
+                z-index: -1;
                 pointer-events: none;
             }
         }
@@ -95,7 +66,7 @@
                 position: fixed;
                 inset: 0;
                 background: linear-gradient(180deg, rgba(3,3,3,0.95) 0%, rgba(3,3,3,0) 25%, rgba(3,3,3,0) 65%, rgba(3,3,3,0.95) 100%);
-                z-index: 2;
+                z-index: -1;
                 pointer-events: none;
             }
         }
@@ -108,18 +79,17 @@
             width: 100vw;
             height: 100vh;
             pointer-events: none;
-            z-index: 3;
+            z-index: 1;
         }
 
-        main { z-index: 10; }
-
+        /* UI Элементы */
         .neon-text {
             text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.4);
         }
 
         .neon-button {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 0 15px rgba(255,255,255,0.1), inset 0 0 10px rgba(255,255,255,0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -129,11 +99,14 @@
         .neon-button:hover {
             background: #ffffff;
             color: #000000;
-            box-shadow: 0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(255,255,255,0.6);
+            box-shadow: 0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(255,255,255,0.5);
             border-color: #ffffff;
-            transform: translateY(-2px);
         }
 
+        /* Анимации появления */
+        @keyframes bgAppear {
+            100% { opacity: 1; filter: blur(0); }
+        }
         @keyframes slideInRight {
             0% { opacity: 0; transform: translateX(50px); }
             100% { opacity: 1; transform: translateX(0); }
@@ -143,9 +116,10 @@
             100% { opacity: 1; transform: translateX(0); }
         }
 
-        .animate-text { opacity: 0; animation: slideInRight 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s; }
-        .animate-btn { opacity: 0; animation: slideInLeft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.8s; }
+        .animate-text { opacity: 0; animation: slideInRight 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s; }
+        .animate-btn { opacity: 0; animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.8s; }
 
+        /* Уведомление */
         #toast {
             position: fixed;
             bottom: -100px;
@@ -164,25 +138,21 @@
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
 
-    <!-- Экран загрузки с логированием -->
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <p id="loading-text">Инициализация 3D движка...</p>
+    <!-- 3D Параллакс Фон -->
+    <div id="parallax-container">
+        <div id="bg-image"></div>
     </div>
-
-    <!-- 3D Сцена -->
-    <div id="bg-3d"></div>
+    
     <div class="bg-overlay"></div>
     <div class="bg-overlay-linear"></div>
-    
-    <!-- 2D Снег -->
     <canvas id="snow-canvas"></canvas>
 
-    <!-- Основной Контент -->
-    <main class="relative w-full h-full flex flex-col md:flex-row justify-between items-center p-6 pb-12 md:p-20 lg:p-32 box-border pointer-events-none" id="main-content" style="opacity: 0; transition: opacity 1s ease;">
+    <!-- Контент -->
+    <main class="relative z-10 w-full h-full flex flex-col md:flex-row justify-between items-center p-6 pb-12 md:p-20 lg:p-32 box-border pointer-events-none">
         
+        <!-- ТЕКСТ (Справа на ПК, Сверху на мобильных) -->
         <div class="w-full md:w-1/3 order-1 md:order-3 flex justify-center md:justify-end text-center md:text-right mt-4 md:mt-0 animate-text pointer-events-auto">
-            <div class="max-w-md bg-black bg-opacity-30 p-6 rounded-3xl backdrop-blur-sm border border-white border-opacity-10">
+            <div class="max-w-md">
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter mb-4 md:mb-6 neon-text leading-none">
                     Ты не<br>спишешь
                 </h1>
@@ -195,8 +165,10 @@
             </div>
         </div>
 
-        <div class="order-2 md:order-2 flex-grow w-full md:w-1/3 min-h-[40vh] md:min-h-0 pointer-events-none"></div>
+        <!-- Центральная пустота для картинки -->
+        <div class="order-2 md:order-2 flex-grow w-full md:w-1/3 min-h-[35vh] md:min-h-0"></div>
 
+        <!-- КНОПКА СКАЧИВАНИЯ (Слева на ПК, Снизу на мобильных) -->
         <div class="w-full md:w-1/3 order-3 md:order-1 flex justify-center md:justify-start mb-4 md:mb-0 animate-btn pointer-events-auto">
             <a id="download-btn" href="Буравцов.pdf" download="Буравцов.pdf" class="neon-button px-8 py-4 sm:px-10 sm:py-5 rounded-full text-sm md:text-base font-bold flex items-center gap-3 group cursor-pointer w-full sm:w-auto justify-center uppercase tracking-widest text-white decoration-none">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:-translate-y-1">
@@ -213,200 +185,29 @@
     <div id="toast" class="text-white text-sm tracking-wide shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
 
     <script>
-        // ==========================================
-        // 1. ПРОДВИНУТЫЙ ЗАГРУЗЧИК 3D-МОДЕЛИ С ПЕРЕХВАТОМ ПУТЕЙ
-        // ==========================================
-        let mouseX = 0;
-        let mouseY = 0;
-
-        window.onload = function() {
-            const container = document.getElementById('bg-3d');
-            const loadingText = document.getElementById('loading-text');
-            const isMobile = window.innerWidth < 768;
-            
-            const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x030303, 0.04);
-
-            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-            
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
-            container.appendChild(renderer.domElement);
-
-            // --- ОСВЕЩЕНИЕ ---
-            const ambient = new THREE.AmbientLight(0xffffff, 0.8); 
-            scene.add(ambient);
-            
-            const dirLight = new THREE.DirectionalLight(0xffffff, 3);
-            dirLight.position.set(5, 10, 10);
-            scene.add(dirLight);
-            
-            const rimLight = new THREE.DirectionalLight(0xffffff, 5);
-            rimLight.position.set(-5, 5, -10);
-            scene.add(rimLight);
-
-            const modelWrapper = new THREE.Group();
-            scene.add(modelWrapper);
-
-            // === ПЕРЕХВАТЧИК ПУТЕЙ ===
-            // Этот код заставляет Three.js игнорировать любые папки, 
-            // прописанные внутри .glb, и искать текстуры прямо здесь.
-            const manager = new THREE.LoadingManager();
-            
-            manager.setURLModifier((url) => {
-                // Разбиваем URL по слэшам и берем только самый последний кусок (имя файла)
-                // Также отбрасываем любые параметры после знака '?'
-                let filename = url.split('/').pop().split('?')[0];
-                return filename; 
-            });
-
-            manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-                const filename = url.split('/').pop().split('?')[0];
-                loadingText.innerText = `Загрузка: ${filename} (${itemsLoaded}/${itemsTotal})`;
-            };
-
-            manager.onError = function ( url ) {
-                const filename = url.split('/').pop().split('?')[0];
-                console.error('Ошибка загрузки файла:', filename);
-                // Мы не прерываем загрузку, если текстура не найдена, просто логируем.
-            };
-
-            // ЗАГРУЗКА .GLB
-            const glbFileName = encodeURI('neon white.glb');
-            const loader = new THREE.GLTFLoader(manager);
-            
-            loader.load(
-                glbFileName,
-                function (gltf) {
-                    const model = gltf.scene;
-
-                    // --- ПРИМЕНЕНИЕ СТИЛЯ ---
-                    model.traverse((child) => {
-                        if (child.isMesh) {
-                            const oldMat = child.material;
-                            
-                            // Создаем новый материал, сохраняя текстуры (если они загрузились)
-                            const newMat = new THREE.MeshPhysicalMaterial({
-                                color: 0x050505, // Почти черный
-                                map: oldMat.map || null,
-                                normalMap: oldMat.normalMap || null,
-                                metalness: 0.9,
-                                roughness: 0.2,
-                                clearcoat: 1.0,
-                                clearcoatRoughness: 0.1
-                            });
-                            
-                            child.material = newMat;
-
-                            // Создаем светящуюся неоновую сетку поверх модели
-                            const wireMat = new THREE.MeshBasicMaterial({
-                                color: 0xffffff,
-                                wireframe: true,
-                                transparent: true,
-                                opacity: 0.15,
-                                depthWrite: false
-                            });
-                            
-                            if (child.isSkinnedMesh) {
-                                const wireMesh = new THREE.SkinnedMesh(child.geometry, wireMat);
-                                wireMesh.skeleton = child.skeleton;
-                                wireMesh.bindMatrix = child.bindMatrix;
-                                wireMesh.bindMatrixInverse = child.bindMatrixInverse;
-                                child.add(wireMesh);
-                            } else {
-                                const wireMesh = new THREE.Mesh(child.geometry, wireMat);
-                                child.add(wireMesh);
-                            }
-                        }
-                    });
-
-                    // --- БЕЗОПАСНОЕ МАСШТАБИРОВАНИЕ ---
-                    model.updateMatrixWorld(true);
-                    const box = new THREE.Box3().setFromObject(model);
-                    const size = box.getSize(new THREE.Vector3());
-                    const center = box.getCenter(new THREE.Vector3());
-                    
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    
-                    if (maxDim === 0 || !isFinite(maxDim)) {
-                        console.warn("Bounding Box равен нулю. Применяю стандартный масштаб.");
-                        model.scale.set(5, 5, 5); 
-                        model.position.set(0, -3, 0);
-                    } else {
-                        // Для персонажей обычно размер по Y (высота) больше всего
-                        const scale = 8 / maxDim; 
-                        model.scale.setScalar(scale);
-                        model.position.sub(center.multiplyScalar(scale)); 
-                    }
-
-                    modelWrapper.add(model);
-                    
-                    modelWrapper.position.y = isMobile ? -2 : -1.5;
-                    camera.position.z = isMobile ? 12 : 8; 
-
-                    // Завершение загрузки
-                    loadingText.innerText = 'Завершено!';
-                    setTimeout(() => {
-                        document.getElementById('loading-screen').style.opacity = '0';
-                        setTimeout(() => {
-                            document.getElementById('loading-screen').style.display = 'none';
-                            container.style.opacity = '1';
-                            document.getElementById('main-content').style.opacity = '1';
-                        }, 1000);
-                    }, 500);
-
-                    // Анимация 3D сцены
-                    const clock = new THREE.Clock();
-                    function animate3D() {
-                        requestAnimationFrame(animate3D);
-                        const time = clock.getElapsedTime();
-
-                        const baseY = isMobile ? -2 : -1.5;
-                        modelWrapper.position.y = baseY + Math.sin(time * 1.5) * 0.2;
-
-                        modelWrapper.rotation.y += (mouseX * 0.4 - modelWrapper.rotation.y) * 0.05;
-                        modelWrapper.rotation.x += (-mouseY * 0.1 - modelWrapper.rotation.x) * 0.05;
-
-                        renderer.render(scene, camera);
-                    }
-                    animate3D();
-                },
-                undefined,
-                function (error) {
-                    loadingText.innerHTML = `Критическая ошибка.<br>Файл <b style="color:red">neon white.glb</b> не найден в корневой папке.`;
-                    console.error("Критическая ошибка при загрузке .glb:", error);
-                }
-            );
-
-            // Адаптивность окна
-            window.addEventListener('resize', () => {
-                const newIsMobile = window.innerWidth < 768;
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                modelWrapper.position.y = newIsMobile ? -2 : -1.5;
-                camera.position.z = newIsMobile ? 12 : 8; 
-            });
-        };
-
-        // Интерактивность мыши
+        // --- 1. ЭФФЕКТ 3D ПАРАЛЛАКСА ДЛЯ ФОНА ---
+        const bgImage = document.getElementById('bg-image');
+        
+        // Для компьютеров (движение мыши)
         window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25; // Коэффициент сдвига
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            bgImage.style.transform = `translate(${xAxis}px, ${yAxis}px)`;
         });
 
-        // Интерактивность гироскопа (Телефоны)
+        // Для телефонов (гироскоп/наклон)
         window.addEventListener('deviceorientation', (e) => {
-            mouseX = Math.min(Math.max(e.gamma || 0, -30), 30) / 30;
-            mouseY = -Math.min(Math.max((e.beta || 0) - 30, -30), 30) / 30;
+            // Ограничиваем углы, чтобы картинка не улетала далеко
+            const beta = Math.min(Math.max(e.beta || 0, -30), 30); // Наклон вперед-назад
+            const gamma = Math.min(Math.max(e.gamma || 0, -30), 30); // Наклон влево-вправо
+            
+            const xAxis = gamma * 1.5; 
+            const yAxis = (beta - 30) * 1.5; // Смещение центра тяжести
+
+            bgImage.style.transform = `translate(${-xAxis}px, ${-yAxis}px)`;
         });
 
-        // ==========================================
-        // 2. 2D НЕОНОВЫЙ СНЕГ
-        // ==========================================
+        // --- 2. СИСТЕМА НЕОНОВОГО СНЕГА ---
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, particles = [];
@@ -455,9 +256,7 @@
         window.addEventListener('resize', () => { initCanvas(); createSnowflakes(); });
         initCanvas(); createSnowflakes(); animateSnow();
 
-        // ==========================================
-        // 3. СКАЧИВАНИЕ И УВЕДОМЛЕНИЯ
-        // ==========================================
+        // --- 3. СКАЧИВАНИЕ И УВЕДОМЛЕНИЯ ---
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = message;
@@ -468,7 +267,7 @@
         document.getElementById('download-btn').addEventListener('click', () => {
             const btn = document.getElementById('download-btn');
             const originalContent = btn.innerHTML;
-            btn.innerHTML = 'ЗАГРУЗКА...';
+            btn.innerHTML = 'Загрузка...';
             btn.style.pointerEvents = 'none';
             showToast("Скачивание презентации началось!");
             setTimeout(() => {
