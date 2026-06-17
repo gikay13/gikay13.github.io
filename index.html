@@ -57,6 +57,7 @@
             text-align: center;
             max-width: 80%;
             opacity: 0.8;
+            font-family: monospace; /* Моноширинный шрифт для логов */
         }
 
         /* 3D Сцена */
@@ -213,7 +214,7 @@
 
     <script>
         // ==========================================
-        // 1. ПРОДВИНУТЫЙ ЗАГРУЗЧИК 3D-МОДЕЛИ
+        // 1. ПРОДВИНУТЫЙ ЗАГРУЗЧИК 3D-МОДЕЛИ С ПЕРЕХВАТОМ ПУТЕЙ
         // ==========================================
         let mouseX = 0;
         let mouseY = 0;
@@ -243,40 +244,37 @@
             dirLight.position.set(5, 10, 10);
             scene.add(dirLight);
             
-            const rimLight = new THREE.DirectionalLight(0xffffff, 5); // Яркая задняя подсветка
+            const rimLight = new THREE.DirectionalLight(0xffffff, 5);
             rimLight.position.set(-5, 5, -10);
             scene.add(rimLight);
 
             const modelWrapper = new THREE.Group();
             scene.add(modelWrapper);
 
-            // Менеджер загрузки файлов с выводом информации на экран
+            // === ПЕРЕХВАТЧИК ПУТЕЙ ===
+            // Этот код заставляет Three.js игнорировать любые папки, 
+            // прописанные внутри .glb, и искать текстуры прямо здесь.
             const manager = new THREE.LoadingManager();
             
-            manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
-                loadingText.innerText = 'Начало загрузки файлов...';
-            };
-            
+            manager.setURLModifier((url) => {
+                // Разбиваем URL по слэшам и берем только самый последний кусок (имя файла)
+                // Также отбрасываем любые параметры после знака '?'
+                let filename = url.split('/').pop().split('?')[0];
+                return filename; 
+            });
+
             manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-                // Выводим имя загружаемого файла (чистим путь)
                 const filename = url.split('/').pop().split('?')[0];
                 loadingText.innerText = `Загрузка: ${filename} (${itemsLoaded}/${itemsTotal})`;
             };
 
             manager.onError = function ( url ) {
-                const filename = url.split('/').pop();
-                loadingText.innerText = `Ошибка при загрузке: ${filename}`;
-                loadingText.style.color = '#ff4444';
-                console.error('Ошибка загрузки:', url);
+                const filename = url.split('/').pop().split('?')[0];
+                console.error('Ошибка загрузки файла:', filename);
+                // Мы не прерываем загрузку, если текстура не найдена, просто логируем.
             };
 
-            // Хак: Если GLB файл внутри себя ищет текстуры по папкам (типа "textures/normal_0.png"),
-            // мы заставляем его искать их в текущей папке.
-            manager.setURLModifier((url) => {
-                return url.split('/').pop(); 
-            });
-
-            // ЗАГРУЗКА .GLB (Название с пробелом конвертируем в правильный URL-формат)
+            // ЗАГРУЗКА .GLB
             const glbFileName = encodeURI('neon white.glb');
             const loader = new THREE.GLTFLoader(manager);
             
@@ -285,36 +283,33 @@
                 function (gltf) {
                     const model = gltf.scene;
 
-                    // --- КИНЕМАТОГРАФИЧНЫЙ МАТЕРИАЛ С ТЕКСТУРАМИ ---
+                    // --- ПРИМЕНЕНИЕ СТИЛЯ ---
                     model.traverse((child) => {
                         if (child.isMesh) {
                             const oldMat = child.material;
                             
-                            // Мы сохраняем оригинальные карты нормалей (рельеф) и диффуза,
-                            // но заставляем их отображаться в черно-белом глянцевом стиле.
+                            // Создаем новый материал, сохраняя текстуры (если они загрузились)
                             const newMat = new THREE.MeshPhysicalMaterial({
-                                color: 0x080808,         // Темно-серый/черный базовый цвет
-                                map: oldMat.map || null, // Если есть текстура - накладываем её как тень
-                                normalMap: oldMat.normalMap || null, // ВОТ ЭТО ДАСТ РЕЛЬЕФ!
-                                metalness: 0.9,          // Эффект металла/пластика
-                                roughness: 0.2,          // Высокий глянец
-                                clearcoat: 1.0,          // Эффект лака
+                                color: 0x050505, // Почти черный
+                                map: oldMat.map || null,
+                                normalMap: oldMat.normalMap || null,
+                                metalness: 0.9,
+                                roughness: 0.2,
+                                clearcoat: 1.0,
                                 clearcoatRoughness: 0.1
                             });
                             
                             child.material = newMat;
 
-                            // Создаем светящуюся неоновую сетку (Wireframe) поверх оригинальной геометрии.
-                            // Это работает безопаснее и быстрее, чем EdgesGeometry для игровых моделей.
+                            // Создаем светящуюся неоновую сетку поверх модели
                             const wireMat = new THREE.MeshBasicMaterial({
                                 color: 0xffffff,
                                 wireframe: true,
                                 transparent: true,
-                                opacity: 0.15, // Легкое футуристичное свечение
+                                opacity: 0.15,
                                 depthWrite: false
                             });
                             
-                            // Если это персонаж со скелетом (SkinnedMesh), клонируем скелет
                             if (child.isSkinnedMesh) {
                                 const wireMesh = new THREE.SkinnedMesh(child.geometry, wireMat);
                                 wireMesh.skeleton = child.skeleton;
@@ -328,8 +323,7 @@
                         }
                     });
 
-                    // --- БЕЗОПАСНОЕ МАСШТАБИРОВАНИЕ ИГРОВЫХ МОДЕЛЕЙ ---
-                    // Обновляем матрицы, чтобы избежать BoundingBox = 0
+                    // --- БЕЗОПАСНОЕ МАСШТАБИРОВАНИЕ ---
                     model.updateMatrixWorld(true);
                     const box = new THREE.Box3().setFromObject(model);
                     const size = box.getSize(new THREE.Vector3());
@@ -337,24 +331,23 @@
                     
                     const maxDim = Math.max(size.x, size.y, size.z);
                     
-                    // Если у модели сломан BoundingBox (часто бывает у скелетных сеток), ставим масштаб вручную
                     if (maxDim === 0 || !isFinite(maxDim)) {
                         console.warn("Bounding Box равен нулю. Применяю стандартный масштаб.");
                         model.scale.set(5, 5, 5); 
-                        model.position.set(0, -3, 0); // Опускаем вниз
+                        model.position.set(0, -3, 0);
                     } else {
-                        const scale = 10 / maxDim; // Стандартизируем высоту
+                        // Для персонажей обычно размер по Y (высота) больше всего
+                        const scale = 8 / maxDim; 
                         model.scale.setScalar(scale);
                         model.position.sub(center.multiplyScalar(scale)); 
                     }
 
                     modelWrapper.add(model);
                     
-                    // Сдвигаем камеру и модель
                     modelWrapper.position.y = isMobile ? -2 : -1.5;
                     camera.position.z = isMobile ? 12 : 8; 
 
-                    // Убираем экран загрузки
+                    // Завершение загрузки
                     loadingText.innerText = 'Завершено!';
                     setTimeout(() => {
                         document.getElementById('loading-screen').style.opacity = '0';
@@ -384,7 +377,7 @@
                 undefined,
                 function (error) {
                     loadingText.innerHTML = `Критическая ошибка.<br>Файл <b style="color:red">neon white.glb</b> не найден в корневой папке.`;
-                    console.error(error);
+                    console.error("Критическая ошибка при загрузке .glb:", error);
                 }
             );
 
